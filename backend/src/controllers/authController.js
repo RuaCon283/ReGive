@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
 const crypto = require('crypto');
 const User = require('../models/User');
 const { ROLES } = require('../constants/enums');
@@ -29,10 +29,12 @@ const updateProfileValidators = [
 ];
 
 const updateUserRoleValidators = [
+  param('id').isMongoId().withMessage('ID người dùng không hợp lệ'),
   body('role').isIn(Object.values(ROLES)).withMessage('Vai trò không hợp lệ'),
 ];
 
 const updateUserStatusValidators = [
+  param('id').isMongoId().withMessage('ID người dùng không hợp lệ'),
   body('isActive').isBoolean().withMessage('Trạng thái không hợp lệ'),
 ];
 

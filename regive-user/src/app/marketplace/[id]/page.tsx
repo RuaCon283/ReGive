@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { marketplaceService } from '@/services/marketplaceService';
 import { orderService } from '@/services/orderService';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 import { paymentService } from '@/services/paymentService';
 import { Product } from '@/types';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -884,6 +885,8 @@ export default function ProductDetailPage() {
       >
         <div className="py-4 space-y-4">
           {orderError && <Alert message="Lỗi đặt hàng" description={orderError} type="error" showIcon />}
+
+          <VerifyEmailNotice />
 
           <Form
             layout="vertical"

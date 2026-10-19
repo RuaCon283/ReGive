@@ -12,6 +12,7 @@ import { uploadService } from '@/services/uploadService';
 import { Campaign, Donation, AiDonationPreview } from '@/types';
 import { formatVND } from '@/lib/format';
 import { AuthGuard } from '@/components/shared/AuthGuard';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 
 const PRODUCT_CATEGORIES = [
   { value: 'clothing', label: 'Quần áo ấm & Thời trang' },
@@ -162,6 +163,7 @@ export default function DonateProductPage() {
         </div>
 
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-xl">
+          <VerifyEmailNotice />
           {createdDonation ? (
             <Result
               status="success"

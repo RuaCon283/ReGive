@@ -64,7 +64,7 @@ export default function VolunteersPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Tình nguyện"
         title="Tình nguyện viên"
         description="Duyệt đăng ký và gán lịch / địa điểm cho chiến dịch."
       />

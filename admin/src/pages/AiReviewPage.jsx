@@ -150,7 +150,7 @@ export default function AiReviewPage() {
     return (
       <div>
         <PageHeader
-          eyebrow="Sprint 3 · Human-in-the-loop"
+          eyebrow="AI · Human-in-the-loop"
           title="So sánh gợi ý AI"
           description="Xem ảnh và gợi ý bên trái, chỉnh form bên phải, rồi Confirm. AI không tự đăng marketplace."
           actions={
@@ -302,7 +302,7 @@ export default function AiReviewPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 3"
+        eyebrow="AI Review"
         title="Hàng chờ AI"
         description="Chỉ các assessment status suggested. Confirm mới ghi vào product; publish là bước khác."
       />

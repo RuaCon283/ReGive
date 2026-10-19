@@ -50,7 +50,7 @@ export default function LoginPage() {
               không tự publish lên marketplace.
             </p>
           </div>
-          <p className="text-xs text-sand/40">Sprint 1–3 · Node.js API · React + Tailwind</p>
+          <p className="text-xs text-sand/40">ReGive · Node.js API · React + Tailwind</p>
         </div>
       </section>
 

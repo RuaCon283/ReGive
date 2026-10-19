@@ -20,9 +20,4 @@ export const donationService = {
     const res = await apiClient.get<ApiResponse<{ donations: Donation[] }>>('/donations/me');
     return res.data.data.donations;
   },
-
-  async getById(id: string): Promise<Donation> {
-    const res = await apiClient.get<ApiResponse<{ donation: Donation }>>(`/donations/${id}`);
-    return res.data.data.donation;
-  },
 };

@@ -23,8 +23,8 @@ const config = {
   vnpay: {
     url: process.env.VN_PAY_URL || '',
     merchantId: process.env.VN_PAY_MERCHANT_ID || '',
+    // VN_PAY_HASH_SECRET là biến chuẩn; giữ fallback HASH_KEY cũ cho tương thích .env đã phát hành
     hashSecret: process.env.VN_PAY_HASH_SECRET || process.env.VN_PAY_HASH_KEY || '',
-    hashKey: process.env.VN_PAY_HASH_KEY || '',
   },
   email: {
     host: process.env.SMTP_HOST || 'smtp.gmail.com',

@@ -5,65 +5,42 @@ const VolunteerRegistration = require('../models/VolunteerRegistration');
 const { CAMPAIGN_STATUS, DONATION_STATUS } = require('../constants/enums');
 const { ApiError, success, asyncHandler } = require('../utils/api');
 
-const campaignBodyValidators = [
-  body('title').trim().notEmpty(),
-  body('shortDescription').optional().isString(),
-  body('description').trim().notEmpty(),
-  body('goal').trim().notEmpty(),
-  body('location').trim().notEmpty(),
-  body('startDate').isISO8601(),
-  body('endDate').isISO8601(),
-  body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
-  body('urgency').optional().isIn(['normal', 'urgent', 'emergency']),
-  body('targetAmount').optional().isFloat({ min: 0 }),
-  body('beneficiaryCount').optional().isInt({ min: 0 }),
-  body('beneficiaryUnit').optional().isString(),
-  body('impactSummary').optional().isString(),
-  body('category').optional().isString(),
-  body('bannerImage').optional().isString(),
-  body('galleryImages').optional().isArray(),
-  body('organization').optional().isString(),
-  body('contactInfo').optional().isObject(),
-  body('bankAccount').optional().isObject(),
-  body('volunteerConditions').optional().isString(),
-  body('targetItems').optional().isArray(),
-  body('budgetBreakdown').optional().isArray(),
-  body('timeline').optional().isArray(),
-  body('faqs').optional().isArray(),
-  body('verificationStatus').optional().isObject(),
-  body('donationGuidelines').optional().isObject(),
-  body('tags').optional().isArray(),
-];
+// Một nguồn duy nhất cho validators chiến dịch: create (bắt buộc trường chính) và update (mọi trường optional)
+function buildCampaignValidators({ optional = false } = {}) {
+  const req = (field) => (optional ? body(field).optional() : body(field));
+  return [
+    req('title').trim().notEmpty(),
+    req('shortDescription').isString(),
+    req('description').trim().notEmpty(),
+    req('goal').trim().notEmpty(),
+    req('location').trim().notEmpty(),
+    req('startDate').isISO8601(),
+    req('endDate').isISO8601(),
+    body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
+    body('urgency').optional().isIn(['normal', 'urgent', 'emergency']),
+    body('targetAmount').optional().isFloat({ min: 0 }),
+    body('beneficiaryCount').optional().isInt({ min: 0 }),
+    req('beneficiaryUnit').isString(),
+    req('impactSummary').isString(),
+    req('category').isString(),
+    req('bannerImage').isString(),
+    req('galleryImages').isArray(),
+    req('organization').isString(),
+    req('contactInfo').isObject(),
+    req('bankAccount').isObject(),
+    req('volunteerConditions').isString(),
+    req('targetItems').isArray(),
+    req('budgetBreakdown').isArray(),
+    req('timeline').isArray(),
+    req('faqs').isArray(),
+    req('verificationStatus').isObject(),
+    req('donationGuidelines').isObject(),
+    req('tags').isArray(),
+  ];
+}
 
-const campaignUpdateValidators = [
-  body('title').optional().trim().notEmpty(),
-  body('shortDescription').optional().isString(),
-  body('description').optional().trim().notEmpty(),
-  body('goal').optional().trim().notEmpty(),
-  body('location').optional().trim().notEmpty(),
-  body('startDate').optional().isISO8601(),
-  body('endDate').optional().isISO8601(),
-  body('status').optional().isIn(Object.values(CAMPAIGN_STATUS)),
-  body('urgency').optional().isIn(['normal', 'urgent', 'emergency']),
-  body('targetAmount').optional().isFloat({ min: 0 }),
-  body('beneficiaryCount').optional().isInt({ min: 0 }),
-  body('beneficiaryUnit').optional().isString(),
-  body('impactSummary').optional().isString(),
-  body('category').optional().isString(),
-  body('bannerImage').optional().isString(),
-  body('galleryImages').optional().isArray(),
-  body('organization').optional().isString(),
-  body('contactInfo').optional().isObject(),
-  body('bankAccount').optional().isObject(),
-  body('volunteerConditions').optional().isString(),
-  body('targetItems').optional().isArray(),
-  body('budgetBreakdown').optional().isArray(),
-  body('timeline').optional().isArray(),
-  body('faqs').optional().isArray(),
-  body('verificationStatus').optional().isObject(),
-  body('donationGuidelines').optional().isObject(),
-  body('tags').optional().isArray(),
-];
+const campaignBodyValidators = buildCampaignValidators();
+const campaignUpdateValidators = buildCampaignValidators({ optional: true });
 
 const idParam = [param('id').isMongoId()];
 

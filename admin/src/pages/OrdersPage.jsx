@@ -45,7 +45,7 @@ export default function OrdersPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Vận hành"
         title="Đơn hàng"
         description="Chỉ chuyển trạng thái hợp lệ: paid → processing → shipped → completed. Huỷ khi pending/paid/processing."
       />

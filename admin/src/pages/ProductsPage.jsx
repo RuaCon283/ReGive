@@ -58,7 +58,7 @@ export default function ProductsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Sản phẩm"
         title="Sản phẩm"
         description="Intake → đánh giá (thủ công hoặc AI) → nhập kho → publish. AI không tự đăng bán."
       />

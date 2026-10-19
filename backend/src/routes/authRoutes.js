@@ -1,5 +1,4 @@
 const express = require('express');
-const { param } = require('express-validator');
 const { validate } = require('../middleware/validate');
 const { authenticate, authorize } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimit');
@@ -27,7 +26,6 @@ router.patch(
   '/users/:id/role',
   authenticate,
   authorize(ROLES.ADMIN),
-  [param('id').isMongoId()],
   ctrl.updateUserRoleValidators,
   validate,
   ctrl.updateUserRole
@@ -36,7 +34,6 @@ router.patch(
   '/users/:id/status',
   authenticate,
   authorize(ROLES.ADMIN),
-  [param('id').isMongoId()],
   ctrl.updateUserStatusValidators,
   validate,
   ctrl.updateUserStatus

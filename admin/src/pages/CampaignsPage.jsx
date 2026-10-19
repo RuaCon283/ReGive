@@ -123,7 +123,7 @@ export default function CampaignsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Chiến dịch"
         title="Chiến dịch"
         description="Admin tạo, sửa, đóng chiến dịch. Nhân viên xem toàn bộ trạng thái."
         actions={

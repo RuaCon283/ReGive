@@ -54,7 +54,7 @@ export default function SupportPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Hỗ trợ"
         title="Yêu cầu hỗ trợ"
         description="Duyệt hồ sơ người thụ hưởng. Không lộ dữ liệu nhạy cảm ra ngoài phạm vi nhân sự."
       />
