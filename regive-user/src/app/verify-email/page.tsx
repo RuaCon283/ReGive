@@ -89,11 +89,6 @@ function VerifyEmailContent() {
           <p className="font-bold text-gray-800">Chưa nhận được email? Thử các bước sau:</p>
           <p>1. Kiểm tra hộp thư đến và mục <strong>Spam/Junk</strong>.</p>
           <p>2. <strong>Đăng nhập</strong> rồi quay lại đây và nhấn nút <strong>"Gửi lại email xác thực"</strong> bên dưới.</p>
-          <p className="text-gray-400 pt-1 border-t border-slate-200/70">
-            Đang chạy local/demo chưa cấu hình SMTP? Link xác thực được in ra{' '}
-            <strong className="text-gray-600">console của backend</strong> (dòng{' '}
-            <code className="text-[10px]">[EMAIL] Body: … link …</code>) — copy link đó dán vào trình duyệt để hoàn tất.
-          </p>
         </div>
 
         <div className="flex flex-col gap-3">
