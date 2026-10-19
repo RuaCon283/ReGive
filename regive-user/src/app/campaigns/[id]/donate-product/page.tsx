@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Form, Input, InputNumber, Button, Alert, message, Result, Select, Checkbox } from 'antd';
-import { Package, ArrowLeft, ShieldCheck, CheckCircle, Info, Sparkles } from 'lucide-react';
+import { Form, Input, InputNumber, Button, Alert, message, Result, Select, Checkbox, Upload } from 'antd';
+import { Package, ArrowLeft, ShieldCheck, CheckCircle, Info, Sparkles, Upload as UploadIcon } from 'lucide-react';
 import { campaignService } from '@/services/campaignService';
 import { donationService } from '@/services/donationService';
 import { aiService } from '@/services/aiService';
+import { uploadService } from '@/services/uploadService';
 import { Campaign, Donation, AiDonationPreview } from '@/types';
 import { formatVND } from '@/lib/format';
 import { AuthGuard } from '@/components/shared/AuthGuard';
@@ -33,6 +34,29 @@ export default function DonateProductPage() {
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [createdDonation, setCreatedDonation] = useState<Donation | null>(null);
 
+  // Ảnh vật phẩm: upload thật qua /api/uploads (Cloudinary hoặc local fallback)
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState(false);
+
+  const handleUploadImage = async (options: any) => {
+    const { file, onSuccess, onError } = options;
+    try {
+      setUploadingImages(true);
+      const res = await uploadService.uploadImage(file as File);
+      setImageUrls((prev) => (prev.length >= 5 ? prev : [...prev, res.url]));
+      onSuccess?.(res);
+    } catch (err: any) {
+      message.error(err.message || 'Tải ảnh thất bại. Vui lòng thử ảnh khác (JPEG/PNG/GIF/WebP, tối đa 5MB).');
+      onError?.(err);
+    } finally {
+      setUploadingImages(false);
+    }
+  };
+
+  const handleRemoveImage = (file: any) => {
+    setImageUrls((prev) => prev.filter((url) => url !== file?.response?.url));
+  };
+
   // AI Assistant states
   const [aiLoading, setAiLoading] = useState(false);
   const [aiResult, setAiResult] = useState<AiDonationPreview | null>(null);
@@ -57,7 +81,7 @@ export default function DonateProductPage() {
         name,
         description: form.getFieldValue('description'),
         category: form.getFieldValue('category'),
-        images: form.getFieldValue('imageUrl') ? [form.getFieldValue('imageUrl')] : [],
+        images: imageUrls,
         extraNote: form.getFieldValue('conditionNote'),
       });
       setAiResult(res);
@@ -94,7 +118,10 @@ export default function DonateProductPage() {
       setSubmitting(true);
       setError(null);
 
-      const images = values.imageUrl ? [values.imageUrl.trim()] : [];
+      if (uploadingImages) {
+        message.warning('Ảnh đang được tải lên, vui lòng đợi một chút rồi thử lại.');
+        return;
+      }
 
       const donation = await donationService.createDonation({
         campaignId,
@@ -107,7 +134,7 @@ export default function DonateProductPage() {
           description: values.description || '',
           conditionNote: values.conditionNote || '',
           estimatedValue: values.estimatedValue || 0,
-          images,
+          images: imageUrls,
         },
         note: values.note || '',
       });
@@ -364,12 +391,25 @@ export default function DonateProductPage() {
                   </Form.Item>
                 </div>
 
-                <Form.Item label="Link ảnh chụp thực tế (nếu có)" name="imageUrl">
-                  <Input
-                    placeholder="Dán link ảnh (Unsplash, Imgur, Google Drive public...)"
-                    size="large"
-                    className="!rounded-xl"
-                  />
+                <Form.Item
+                  label="Ảnh chụp thực tế vật phẩm (tối đa 5 ảnh, JPEG/PNG/GIF/WebP ≤ 5MB)"
+                  required={false}
+                  extra="Ảnh thật giúp nhân viên ReGive và AI thẩm định chính xác hơn."
+                >
+                  <Upload
+                    accept="image/jpeg,image/png,image/gif,image/webp"
+                    listType="picture-card"
+                    multiple
+                    maxCount={5}
+                    customRequest={handleUploadImage}
+                    onRemove={handleRemoveImage}
+                  >
+                    <div className="flex flex-col items-center justify-center gap-1 text-gray-500">
+                      <UploadIcon className="w-5 h-5 text-sec-s600" />
+                      <span className="text-[11px] font-medium">Chọn / chụp ảnh</span>
+                    </div>
+                  </Upload>
+                  {uploadingImages && <p className="text-xs text-gray-400 mt-1">Đang tải ảnh lên…</p>}
                 </Form.Item>
 
                 <Form.Item label="Mô tả chi tiết" name="description">

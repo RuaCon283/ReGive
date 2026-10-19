@@ -41,6 +41,14 @@ router.patch(
   validate,
   ctrl.updateProduct
 );
+router.delete(
+  '/:id',
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.EMPLOYEE),
+  ctrl.idParam,
+  validate,
+  ctrl.removeProduct
+);
 router.post(
   '/:id/assess',
   authenticate,

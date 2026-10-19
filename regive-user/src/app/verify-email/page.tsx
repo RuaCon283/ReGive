@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Spin, Alert } from 'antd';
+import { Button, Spin, Alert, message } from 'antd';
 import { Heart, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
 import { authService } from '@/services/authService';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -12,11 +12,31 @@ function VerifyEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams?.get('token') || '';
-  const { setUser } = useAuthStore();
+  const { setUser, user } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  const handleResendVerification = async () => {
+    if (!user) {
+      message.warning('Vui lòng đăng nhập trước, sau đó quay lại đây để gửi lại email xác thực.');
+      router.push('/login');
+      return;
+    }
+    try {
+      setResending(true);
+      const msg = await authService.resendVerification();
+      setResent(true);
+      message.success(msg);
+    } catch (err: any) {
+      message.error(err.message || 'Không thể gửi lại email xác thực lúc này');
+    } finally {
+      setResending(false);
+    }
+  };
 
   useEffect(() => {
     if (!token) {
@@ -62,11 +82,15 @@ function VerifyEmailContent() {
               Quay lại đăng nhập
             </Button>
           </Link>
-          <Link href="/forgot-password">
-            <Button size="large" className="w-full h-12 rounded-xl font-bold">
-              Yêu cầu gửi lại email xác thực
-            </Button>
-          </Link>
+          <Button
+            size="large"
+            className="w-full h-12 rounded-xl font-bold"
+            loading={resending}
+            disabled={resent}
+            onClick={handleResendVerification}
+          >
+            {resent ? 'Đã gửi lại email xác thực' : 'Gửi lại email xác thực'}
+          </Button>
         </div>
       </div>
     );

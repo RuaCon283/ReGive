@@ -1,9 +1,15 @@
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const crypto = require('crypto');
 const { ApiError } = require('../utils/api');
 
 const UPLOAD_DIR = path.join(__dirname, '../../uploads');
+
+// Đảm bảo thư mục upload tồn tại (multer không tự tạo)
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {

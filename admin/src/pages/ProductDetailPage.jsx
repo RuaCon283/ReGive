@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { aiApi, inventoryApi, productApi, uploadApi } from '../api/client';
 import {
   Badge,
   Button,
   Card,
+  ConfirmDialog,
   ErrorBox,
   Field,
   ImageUpload,
@@ -45,6 +46,7 @@ function ProductDetailSkeleton() {
 
 export default function ProductDetailPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const toast = useToast();
   const [product, setProduct] = useState(null);
   const [assessments, setAssessments] = useState([]);
@@ -55,6 +57,8 @@ export default function ProductDetailPage() {
   const [stockQty, setStockQty] = useState(1);
   const [busy, setBusy] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteBusy, setDeleteBusy] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -129,6 +133,18 @@ export default function ProductDetailPage() {
     }
   }
 
+  async function confirmDeleteProduct() {
+    setDeleteBusy(true);
+    try {
+      await productApi.remove(id);
+      toast.success('Đã xoá sản phẩm');
+      navigate('/products');
+    } catch (err) {
+      toast.error(err.message);
+      setDeleteBusy(false);
+    }
+  }
+
   if (loading) return <ProductDetailSkeleton />;
   if (error) return <ErrorBox error={error} onRetry={load} />;
   if (!product) return null;
@@ -159,6 +175,9 @@ export default function ProductDetailPage() {
                 Đăng marketplace
               </Button>
             )}
+            <Button variant="danger" onClick={() => setDeleteOpen(true)}>
+              Xoá sản phẩm
+            </Button>
           </>
         }
       />
@@ -397,6 +416,16 @@ export default function ProductDetailPage() {
           )}
         </div>
       </Card>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        title="Xoá sản phẩm"
+        description="Xoá sản phẩm này? Hành động không thể hoàn tác. Sản phẩm đang bán hoặc đã có đơn hàng sẽ bị chặn xoá."
+        confirmLabel="Xoá"
+        busy={deleteBusy}
+        onConfirm={confirmDeleteProduct}
+        onClose={() => setDeleteOpen(false)}
+      />
     </div>
   );
 }

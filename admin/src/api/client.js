@@ -109,6 +109,7 @@ export const productApi = {
   list: (query) => api('/api/products', { query }),
   get: (id) => api(`/api/products/${id}`),
   update: (id, body) => api(`/api/products/${id}`, { method: 'PATCH', body }),
+  remove: (id) => api(`/api/products/${id}`, { method: 'DELETE' }),
   intake: (body) => api('/api/products/intake', { method: 'POST', body }),
   assess: (id, body) => api(`/api/products/${id}/assess`, { method: 'POST', body }),
   publish: (id) => api(`/api/products/${id}/publish`, { method: 'POST' }),

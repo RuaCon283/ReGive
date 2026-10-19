@@ -3,10 +3,12 @@ import { ApiResponse } from '@/types';
 
 export type UploadResponse = {
   url: string;
-  filename: string;
-  originalName: string;
+  publicId: string | null;
+  filename?: string;
+  originalName?: string;
   size: number;
   mimetype: string;
+  storage?: 'local' | 'cloudinary';
 };
 
 export type UploadMultipleResponse = {
@@ -34,7 +36,8 @@ export const uploadService = {
     return res.data.data;
   },
 
-  async deleteImage(filename: string): Promise<void> {
-    await apiClient.delete(`/uploads/${filename}`);
+  async deleteImage(publicId: string, filename?: string): Promise<void> {
+    // Endpoint đúng: DELETE /uploads/delete với body { publicId } (Cloudinary) hoặc { filename } (local)
+    await apiClient.delete('/uploads/delete', { data: { publicId, filename } });
   },
 };
