@@ -77,15 +77,27 @@ async function sendEmail({ to, subject, html, text }) {
     return { messageId: 'console-log', accepted: [to] };
   }
 
-  const info = await transport.sendMail({
-    from: config.email.from,
-    to,
-    subject,
-    html,
-    text,
-  });
-
-  return info;
+  try {
+    const info = await transport.sendMail({
+      from: config.email.from,
+      to,
+      subject,
+      html,
+      text,
+    });
+    return info;
+  } catch (err) {
+    // Gửi SMTP thất bại (sai credentials / mất mạng / bị chặn):
+    // dump lại toàn bộ nội dung (kèm link xác thực/reset) ra console để dev/demo vẫn lấy được,
+    // rồi rethrow cho caller log thêm ngữ cảnh.
+    console.error('[Email] Gửi SMTP thất bại:', err.message);
+    console.log('═══════════════════════════════════════════');
+    console.log(`[EMAIL-FALLBACK] To: ${to}`);
+    console.log(`[EMAIL-FALLBACK] Subject: ${subject}`);
+    console.log(`[EMAIL-FALLBACK] Body: ${text || '(HTML only)'}`);
+    console.log('═══════════════════════════════════════════');
+    throw err;
+  }
 }
 
 async function sendVerificationEmail(user, token) {
