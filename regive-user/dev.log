@@ -1,0 +1,98 @@
+
+> regive-user@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.103.100.252:3000
+- Environments: .env.local
+✓ Ready in 4.7s
+✓ Running next.config.ts took 914ms
+⚠ Slow filesystem detected. The benchmark took 245ms. If \\?\D:\project\Project_Capstone_2_REGIVE\regive-user\.next\dev is a network drive, consider moving it to a local folder.
+See more: https://nextjs.org/docs/app/guides/local-development
+
+ GET / 200 in 5.3s (next.js: 2.3s, application-code: 2.9s)
+ GET /marketplace 200 in 4.6s (next.js: 2.7s, application-code: 1881ms)
+ GET /marketplace/6ac4402308b6bd950ce309e1 200 in 11.1s
+ GET / 200 in 176ms (next.js: 9ms, application-code: 167ms)
+ GET /marketplace 200 in 330ms (next.js: 14ms, application-code: 315ms)
+ GET /marketplace/6ac4402308b6bd950ce309e1 200 in 121ms (next.js: 19ms, application-code: 102ms)
+ GET /campaigns 200 in 6.4s (next.js: 4.4s, application-code: 2.0s)
+ GET /campaigns/6abb1e3e3a06c7982a48ef13 200 in 4.2s (next.js: 1770ms, application-code: 2.5s)
+ GET /login 200 in 3.6s (next.js: 2.3s, application-code: 1286ms)
+ GET /register 200 in 2.8s (next.js: 1681ms, application-code: 1081ms)
+○ Compiling /forgot-password ...
+ GET /forgot-password 200 in 22.0s (next.js: 21.8s, application-code: 216ms)
+ GET /verify-email?token=test 200 in 1405ms (next.js: 1285ms, application-code: 120ms)
+[browser] Warning: [antd: Alert] `message` is deprecated. Please use `title` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /login 200 in 236ms (next.js: 5ms, application-code: 231ms)
+ GET /campaigns/6abb1e3e3a06c7982a48ef13 200 in 117ms (next.js: 40ms, application-code: 77ms)
+ GET /me/dashboard 200 in 275ms (next.js: 112ms, application-code: 163ms)
+ GET /login?redirect=%2Fme%2Fdashboard 200 in 38ms (next.js: 7ms, application-code: 31ms)
+ GET /login?redirect=%2Fme%2Fdashboard 200 in 16ms (next.js: 3ms, application-code: 13ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+ GET /notifications 200 in 248ms (next.js: 89ms, application-code: 158ms)
+ GET /login?redirect=%2Fnotifications 200 in 35ms (next.js: 4ms, application-code: 31ms)
+ GET /login?redirect=%2Fnotifications 200 in 18ms (next.js: 4ms, application-code: 14ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+✓ Finished filesystem cache database compaction in 10.6s
+ GET /login 200 in 1198ms (next.js: 1078ms, application-code: 120ms)
+[browser] Warning: [antd: Alert] `message` is deprecated. Please use `title` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /campaigns/6abb1e3e3a06c7982a48ef13 200 in 2.1s (next.js: 2.1s, application-code: 84ms)
+ GET /verify-email?token=test 200 in 392ms (next.js: 329ms, application-code: 63ms)
+[browser] Warning: [antd: Alert] `message` is deprecated. Please use `title` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /login 200 in 17ms (next.js: 4ms, application-code: 13ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[browser] Warning: [antd: message] Static function can not consume context like dynamic theme. Please use 'App' component instead. 
+    at Object.handleResendVerification [as onClick] (src/app/verify-email/page.tsx:27:15)
+    at <unknown> (pptr:evaluate;C%3A%5CUsers%5CPC%5CAppData%5CLocal%5CTemp%5Cregive-uitest%5Cshot2.js%3A70%3A14:4:14)
+  25 |   const handleResendVerification = async () => {
+  26 |     if (!user) {
+> 27 |       message.warning('Vui lòng đăng nhập trước, sau đó quay lại đây để gửi lại email xác thực.');
+     |               ^
+  28 |       router.push('/login');
+  29 |       return;
+  30 |     } (src/app/verify-email/page.tsx:27:15)
+✓ Finished filesystem cache database compaction in 10.6s
+ GET /login 200 in 265ms (next.js: 117ms, application-code: 148ms)
+ GET / 200 in 161ms (next.js: 109ms, application-code: 52ms)
+[browser] Warning: [antd: message] Static function can not consume context like dynamic theme. Please use 'App' component instead. 
+    at handleSubmit (src/app/login/page.tsx:27:15)
+  25 |         password: values.password,
+  26 |       });
+> 27 |       message.success('Đăng nhập thành công!');
+     |               ^
+  28 |       router.push(redirect);
+  29 |     } catch (err: any) {
+  30 |       setError(err.message || 'Email hoặc mật khẩu không chính xác'); (src/app/login/page.tsx:27:15)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+ GET /campaigns/6abb1e3e3a06c7982a48ef13 200 in 140ms (next.js: 62ms, application-code: 79ms)
+ GET / 200 in 96ms (next.js: 7ms, application-code: 89ms)
+ GET /login 200 in 865ms (next.js: 753ms, application-code: 111ms)
+[browser] Warning: [antd: message] Static function can not consume context like dynamic theme. Please use 'App' component instead. 
+    at handleSubmit (src/app/login/page.tsx:27:15)
+  25 |         password: values.password,
+  26 |       });
+> 27 |       message.success('Đăng nhập thành công!');
+     |               ^
+  28 |       router.push(redirect);
+  29 |     } catch (err: any) {
+  30 |       setError(err.message || 'Email hoặc mật khẩu không chính xác'); (src/app/login/page.tsx:27:15)
+ GET / 200 in 102ms (next.js: 52ms, application-code: 50ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+ GET /me/dashboard 200 in 921ms (next.js: 853ms, application-code: 68ms)
+[browser] Warning: [antd: Drawer] `width` is deprecated. Please use `size` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /me/orders 200 in 1221ms (next.js: 872ms, application-code: 349ms)
+[browser] Warning: [antd: Drawer] `width` is deprecated. Please use `size` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /notifications 200 in 2.7s (next.js: 2.5s, application-code: 196ms)
+[browser] Warning: [antd: Drawer] `width` is deprecated. Please use `size` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+ GET /me/payments 200 in 2.4s (next.js: 1628ms, application-code: 734ms)
+[browser] Warning: [antd: Drawer] `width` is deprecated. Please use `size` instead. 
+    at Array.forEach (<anonymous>) (<anonymous>)
+[?25h

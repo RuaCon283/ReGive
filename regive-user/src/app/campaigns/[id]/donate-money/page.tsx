@@ -11,6 +11,7 @@ import { paymentService } from '@/services/paymentService';
 import { Campaign } from '@/types';
 import { MoneyInput } from '@/components/shared/MoneyInput';
 import { AuthGuard } from '@/components/shared/AuthGuard';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 import { formatVND } from '@/lib/format';
 
 function DonateMoneyContent() {
@@ -100,6 +101,8 @@ function DonateMoneyContent() {
         </div>
 
         {error && <Alert message="Lỗi" description={error} type="error" showIcon />}
+
+        <VerifyEmailNotice />
 
         <Form layout="vertical" onFinish={handleSubmit} requiredMark="optional">
           {/* Amount Input with Presets */}

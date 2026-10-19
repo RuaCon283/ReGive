@@ -10,6 +10,7 @@ import { Campaign } from '@/types';
 import { MoneyInput } from '@/components/shared/MoneyInput';
 import { formatVND } from '@/lib/format';
 import { useAuthStore } from '@/store/useAuthStore';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 
 interface QuickDonateModalProps {
   campaign: Campaign | null;
@@ -94,12 +95,14 @@ export const QuickDonateModal: React.FC<QuickDonateModalProps> = ({
       open={open}
       onCancel={onClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       centered
       className="rounded-2xl"
     >
       <div className="py-3 space-y-4">
         {error && <Alert message="Lỗi" description={error} type="error" showIcon />}
+
+        <VerifyEmailNotice />
 
         <Form layout="vertical" onFinish={handleSubmit} requiredMark="optional">
           <Form.Item label="Chọn hoặc nhập số tiền (VND)" required>

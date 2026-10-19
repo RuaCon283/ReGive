@@ -14,7 +14,7 @@ export default function PaymentsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Tài chính"
         title="Thanh toán"
         description="Sandbox gateway. Nhân sự xem toàn bộ giao dịch đơn hàng và quyên góp tiền."
       />

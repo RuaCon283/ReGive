@@ -10,6 +10,7 @@ import {
   DataState,
   Field,
   FilterSelect,
+  ImageUpload,
   Input,
   Modal,
   PageHeader,
@@ -33,6 +34,7 @@ const emptyForm = {
   endDate: '',
   status: 'draft',
   targetAmount: 0,
+  bannerImage: '',
 };
 
 export default function CampaignsPage() {
@@ -65,6 +67,7 @@ export default function CampaignsPage() {
       endDate: toDateInput(campaign.endDate),
       status: campaign.status || 'draft',
       targetAmount: campaign.targetAmount || 0,
+      bannerImage: campaign.bannerImage || '',
     });
     setOpen(true);
   }
@@ -73,12 +76,23 @@ export default function CampaignsPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      let bannerImage = form.bannerImage;
+
+      // If bannerImage is a File object, upload it first
+      if (bannerImage instanceof File) {
+        const { uploadApi } = await import('../api/client');
+        const res = await uploadApi.single(bannerImage);
+        bannerImage = res.data?.url;
+      }
+
       const payload = {
         ...form,
+        bannerImage,
         startDate: toIsoStart(form.startDate),
         endDate: toIsoEnd(form.endDate),
         targetAmount: Number(form.targetAmount) || 0,
       };
+
       if (editing) await campaignApi.update(oid(editing), payload);
       else await campaignApi.create(payload);
       toast.success(editing ? 'Đã cập nhật chiến dịch' : 'Đã tạo chiến dịch');
@@ -109,7 +123,7 @@ export default function CampaignsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Chiến dịch"
         title="Chiến dịch"
         description="Admin tạo, sửa, đóng chiến dịch. Nhân viên xem toàn bộ trạng thái."
         actions={
@@ -211,6 +225,13 @@ export default function CampaignsPage() {
           </Field>
           <Field label="Mô tả">
             <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} required />
+          </Field>
+          <Field label="Ảnh bìa">
+            <ImageUpload
+              value={form.bannerImage}
+              onChange={(url) => setForm({ ...form, bannerImage: url })}
+              label="Chọn ảnh bìa chiến dịch"
+            />
           </Field>
           <Field label="Mục tiêu">
             <Input value={form.goal} onChange={(e) => setForm({ ...form, goal: e.target.value })} required />

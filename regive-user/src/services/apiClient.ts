@@ -56,6 +56,8 @@ apiClient.interceptors.response.use(
           window.location.pathname.startsWith('/register');
         if (!isAuthPage && tokenStorage.get()) {
           tokenStorage.remove();
+          // Token hết hạn: đẩy người dùng về trang đăng nhập để đăng nhập lại
+          window.location.replace('/login');
         }
       }
     }

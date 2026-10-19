@@ -22,6 +22,7 @@ interface AuthState {
   logout: () => void;
   loadUser: () => Promise<void>;
   updateProfile: (payload: UpdateProfilePayload) => Promise<User>;
+  setUser: (user: User) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -65,6 +66,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true });
     try {
       const { user, token } = await authService.register(payload);
+      ensureUserAppRole(user);
       tokenStorage.set(token);
       set({ user, token, loading: false, initialized: true });
       return user;
@@ -89,5 +91,9 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ loading: false });
       throw err;
     }
+  },
+
+  setUser: (user: User) => {
+    set({ user });
   },
 }));

@@ -17,15 +17,28 @@ const config = {
     return listed;
   })(),
   nodeEnv: process.env.NODE_ENV || 'development',
-  aiProvider: process.env.AI_PROVIDER || 'mock',
+  aiProvider: process.env.AI_PROVIDER || 'gemini',
   aiApiKey: process.env.GEMINI_API_KEY || process.env.AI_API_KEY || '',
   aiModel: process.env.GEMINI_MODEL || process.env.AI_MODEL || 'gemini-2.0-flash',
   vnpay: {
     url: process.env.VN_PAY_URL || '',
     merchantId: process.env.VN_PAY_MERCHANT_ID || '',
+    // VN_PAY_HASH_SECRET là biến chuẩn; giữ fallback HASH_KEY cũ cho tương thích .env đã phát hành
     hashSecret: process.env.VN_PAY_HASH_SECRET || process.env.VN_PAY_HASH_KEY || '',
-    hashKey: process.env.VN_PAY_HASH_KEY || '',
   },
+  email: {
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT) || 587,
+    user: process.env.SMTP_USER || '',
+    pass: process.env.SMTP_PASS || '',
+    from: process.env.SMTP_FROM || 'ReGive <noreply@regive.vn>',
+  },
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+    apiKey: process.env.CLOUDINARY_API_KEY || '',
+    apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+  },
+  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
 };
 
 module.exports = config;

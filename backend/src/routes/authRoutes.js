@@ -1,5 +1,4 @@
 const express = require('express');
-const { param } = require('express-validator');
 const { validate } = require('../middleware/validate');
 const { authenticate, authorize } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimit');
@@ -10,6 +9,9 @@ const router = express.Router();
 
 router.post('/register', authLimiter, ctrl.registerValidators, validate, ctrl.register);
 router.post('/login', authLimiter, ctrl.loginValidators, validate, ctrl.login);
+router.post('/forgot-password', authLimiter, ctrl.forgotPasswordValidators, validate, ctrl.forgotPassword);
+router.post('/reset-password', ctrl.resetPasswordValidators, validate, ctrl.resetPassword);
+router.post('/verify-email', ctrl.verifyEmailValidators, validate, ctrl.verifyEmail);
 router.get('/me', authenticate, ctrl.me);
 router.patch(
   '/me',
@@ -18,12 +20,12 @@ router.patch(
   validate,
   ctrl.updateProfile
 );
+router.post('/resend-verification', authenticate, ctrl.resendVerification);
 router.get('/users', authenticate, authorize(ROLES.ADMIN), ctrl.listUsers);
 router.patch(
   '/users/:id/role',
   authenticate,
   authorize(ROLES.ADMIN),
-  [param('id').isMongoId()],
   ctrl.updateUserRoleValidators,
   validate,
   ctrl.updateUserRole
@@ -32,7 +34,6 @@ router.patch(
   '/users/:id/status',
   authenticate,
   authorize(ROLES.ADMIN),
-  [param('id').isMongoId()],
   ctrl.updateUserStatusValidators,
   validate,
   ctrl.updateUserStatus

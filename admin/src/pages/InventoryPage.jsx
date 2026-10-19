@@ -72,7 +72,7 @@ export default function InventoryPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Kho vận"
         title="Kho & tồn"
         description="Nhập, xuất, điều chỉnh tồn. Publish marketplace cần sản phẩm còn hàng."
       />

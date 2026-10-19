@@ -105,7 +105,7 @@ export default function NewSupportRequestPage() {
                   size="large"
                   className="!rounded-xl"
                   options={[
-                    { label: 'Thấp (Không quá gấp)', value: 'low' },
+                    { label: 'Thầp (Không quá gấp)', value: 'low' },
                     { label: 'Trung bình (Cần hỗ trợ sớm)', value: 'medium' },
                     { label: 'Cao (Rất cấp thiết)', value: 'high' },
                   ]}

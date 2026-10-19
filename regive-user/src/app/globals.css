@@ -194,7 +194,7 @@ h1, h2, h3, h4, h5, h6 {
 .float-med  { animation: float-med 5s ease-in-out infinite; }
 
 /* ─── Ant Design Overrides (Using Theme Tokens) ── */
-.ant-btn-primary {
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled) {
   background: var(--clk-color-p-s500) !important;
   border-color: var(--clk-color-p-s500) !important;
   border-radius: 9999px !important;
@@ -203,9 +203,21 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 4px 0 rgba(2, 72, 112, 0.4), 0 8px 24px rgba(2, 72, 112, 0.28) !important;
 }
 
-.ant-btn-primary:hover {
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   background: var(--clk-color-p-s600) !important;
   border-color: var(--clk-color-p-s600) !important;
+}
+
+/* Disabled: nền xám sáng + chữ xám vừa — đủ tương phản để đọc,
+   không còn tình trạng nền tối chìm chữ tối. */
+.ant-btn-primary:disabled,
+.ant-btn-primary.ant-btn-disabled,
+.ant-btn-primary:disabled:hover,
+.ant-btn-primary.ant-btn-disabled:hover {
+  background: #e2e8f0 !important;
+  border-color: #e2e8f0 !important;
+  color: #64748b !important;
+  box-shadow: none !important;
 }
 
 .ant-btn-default {

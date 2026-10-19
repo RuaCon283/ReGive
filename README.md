@@ -5,8 +5,8 @@ Nền tảng từ thiện + marketplace second-hand (AI hỗ trợ, human-in-the
 ## Stack
 
 - Backend: Node.js + Express + MongoDB + JWT (`backend/`)
-- User + Employee web: Next.js + Tailwind (`web/`) — `http://localhost:3000`
-- Admin web: React + Vite + Tailwind (`admin/`) — Admin & Employee, `http://localhost:5173`
+- User web (USER / BENEFICIARY): Next.js + Ant Design + Tailwind (`regive-user/`) — `http://localhost:3000`
+- Admin web (ADMIN / EMPLOYEE): React + Vite + Tailwind (`admin/`) — `http://localhost:5173`
 
 ## Chạy local
 
@@ -20,8 +20,8 @@ npm start
 ```
 
 ```bash
-# 2. User / Employee (http://localhost:3000)
-cd web
+# 2. User (http://localhost:3000)
+cd regive-user
 npm install
 npm run dev
 ```
@@ -44,11 +44,10 @@ Next.js rewrite `/api` → `http://localhost:5000`. Vite proxy `/api` → backen
 | USER | user@regive.local | User@123 |
 | BENEFICIARY | beneficiary@regive.local | Beneficiary@123 |
 
-USER / EMPLOYEE dùng `web/` (`http://localhost:3000`). ADMIN dùng `admin/` (`http://localhost:5173`).
+USER / BENEFICIARY dùng `regive-user/` (`http://localhost:3000`). ADMIN / EMPLOYEE dùng `admin/` (`http://localhost:5173`).
 
 ## Tài liệu
 
-- `document/ReGive_KeHoach_XayDung_Theo_Phase.md`
-- `backend/README.md` · `backend/docs/RBAC.md` · `backend/docs/openapi.yaml`
-- `admin/README.md`
-"# Project-Regive" 
+- `docs/ReGive_KeHoach_XayDung_Theo_Phase.md` · `docs/USER_WEBSITE_PLAN.md` · `docs/AI_WORKFLOW_AUDIT.md`
+- `backend/README.md` · `backend/docs/RBAC.md` · `backend/docs/openapi.yaml` · `backend/docs/KNOWN_ISSUES.md` · `backend/docs/DELIVERY.md`
+- `admin/README.md` · `regive-user/README.md`

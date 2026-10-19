@@ -92,11 +92,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ targetType, targ
 
   const canDelete = (comment: Comment) => {
     if (!user) return false;
+    // User app chỉ cho role USER/BENEFICIARY — so sánh tác giả thay vì check role staff
     const authorId =
       typeof comment.author === 'string'
         ? comment.author
         : comment.author?._id || comment.author?.id;
-    return authorId === user.id || ['ADMIN', 'EMPLOYEE'].includes(user.role as string);
+    return authorId === user.id;
   };
 
   return (

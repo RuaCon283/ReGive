@@ -27,7 +27,7 @@ const aiAssessmentSchema = new mongoose.Schema(
       enum: Object.values(AI_ASSESSMENT_STATUS),
       default: AI_ASSESSMENT_STATUS.SUGGESTED,
     },
-    provider: { type: String, default: 'mock' },
+    provider: { type: String, default: 'heuristic' },
     input: {
       name: { type: String, default: '' },
       description: { type: String, default: '' },

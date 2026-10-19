@@ -1,6 +1,8 @@
 const { body, param } = require('express-validator');
 const Product = require('../models/Product');
 const Donation = require('../models/Donation');
+const Order = require('../models/Order');
+const AiAssessment = require('../models/AiAssessment');
 const {
   ROLES,
   DONATION_TYPES,
@@ -31,6 +33,34 @@ const assessValidators = [
   body('suitableForMarketplace').optional().isBoolean(),
   body('assessmentNote').optional().isString(),
   body('description').optional().isString(),
+];
+
+const updateValidators = [
+  param('id').isMongoId(),
+  body('sku').optional().isString(),
+  body('name').optional().trim().isString().notEmpty(),
+  body('brand').optional().isString(),
+  body('origin').optional().isString(),
+  body('description').optional().isString(),
+  body('category').optional().isString(),
+  body('images').optional().isArray(),
+  body('originalPrice').optional().isFloat({ min: 0 }),
+  body('price').optional().isFloat({ min: 0 }),
+  body('suggestedPrice').optional().isFloat({ min: 0 }),
+  body('weight').optional().isFloat({ min: 0 }),
+  body('dimensions').optional().isObject(),
+  body('material').optional().isString(),
+  body('color').optional().isString(),
+  body('tags').optional().isArray(),
+  body('highlights').optional().isArray(),
+  body('specifications').optional().isObject(),
+  body('inspectionReport').optional().isObject(),
+  body('donationStory').optional().isObject(),
+  body('charityImpact').optional().isObject(),
+  body('warehouseAndShipping').optional().isObject(),
+  body('guaranteePolicy').optional().isObject(),
+  body('storageLocation').optional().isString(),
+  body('assessmentNote').optional().isString(),
 ];
 
 const idParam = [param('id').isMongoId()];
@@ -253,9 +283,35 @@ const updateProduct = asyncHandler(async (req, res) => {
   return success(res, { product }, 'Cập nhật sản phẩm thành công');
 });
 
+const removeProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+  if (!product) throw new ApiError(404, 'Không tìm thấy sản phẩm');
+
+  // Chặn xoá khi sản phẩm đang niêm yết trên marketplace
+  if (product.listedOnMarketplace && product.status === PRODUCT_STATUS.LISTED) {
+    throw new ApiError(400, 'Sản phẩm đang bán trên marketplace. Vui lòng gỡ bán trước khi xoá.');
+  }
+
+  // Chặn xoá khi sản phẩm đã nằm trong đơn hàng (giữ nguyên vẹn dữ liệu giao dịch)
+  const orderCount = await Order.countDocuments({ 'items.product': product._id });
+  if (orderCount > 0) {
+    throw new ApiError(
+      409,
+      `Không thể xoá: sản phẩm đã nằm trong ${orderCount} đơn hàng. Hãy gỡ bán (unpublish) thay vì xoá.`
+    );
+  }
+
+  // Xoá sạch các bản đánh giá AI liên quan, rồi xoá sản phẩm
+  await AiAssessment.deleteMany({ product: product._id });
+  await product.deleteOne();
+
+  return success(res, null, 'Đã xoá sản phẩm thành công');
+});
+
 module.exports = {
   intakeValidators,
   assessValidators,
+  updateValidators,
   idParam,
   intakeFromDonation,
   assess,
@@ -266,4 +322,5 @@ module.exports = {
   publish,
   unpublish,
   updateProduct,
+  removeProduct,
 };

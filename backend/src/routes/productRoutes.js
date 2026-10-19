@@ -37,9 +37,17 @@ router.patch(
   '/:id',
   authenticate,
   authorize(ROLES.ADMIN, ROLES.EMPLOYEE),
-  ctrl.idParam,
+  ctrl.updateValidators,
   validate,
   ctrl.updateProduct
+);
+router.delete(
+  '/:id',
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.EMPLOYEE),
+  ctrl.idParam,
+  validate,
+  ctrl.removeProduct
 );
 router.post(
   '/:id/assess',

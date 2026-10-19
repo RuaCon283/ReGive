@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { cloneElement, isValidElement, useEffect, useId, useRef } from 'react';
+import { cloneElement, isValidElement, useEffect, useId, useRef, useState } from 'react';
 import { BADGE_TONE } from '../lib/constants';
 import { classNames } from '../lib/format';
 
@@ -27,7 +27,7 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={classNames(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss motion-reduce:active:scale-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss motion-reduce:active:scale-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-mist disabled:text-ink/45 disabled:border-transparent disabled:shadow-none disabled:active:scale-100',
         buttonStyles[variant],
         className
       )}
@@ -415,5 +415,92 @@ export function ConfirmDialog({
         </Button>
       </div>
     </Modal>
+  );
+}
+
+export function ImageUpload({ value, onChange, onRemove, accept = "image/*", label = "Upload ảnh" }) {
+  const inputRef = useRef(null);
+  const [preview, setPreview] = useState(value || null);
+  const [file, setFile] = useState(null);
+
+  useEffect(() => {
+    // If value is a URL (from backend), show it
+    // If value is a File object, create local preview
+    if (!value) {
+      setPreview(null);
+      setFile(null);
+      return;
+    }
+
+    if (value instanceof File) {
+      setFile(value);
+      const url = URL.createObjectURL(value);
+      setPreview(url);
+      return () => URL.revokeObjectURL(url);
+    }
+
+    // It's a URL string
+    setPreview(value);
+    setFile(null);
+  }, [value]);
+
+  function handleFile(e) {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
+    setFile(selectedFile);
+    const url = URL.createObjectURL(selectedFile);
+    setPreview(url);
+    onChange?.(selectedFile); // Return File object, not URL
+
+    if (inputRef.current) inputRef.current.value = '';
+  }
+
+  function handleRemove() {
+    setPreview(null);
+    setFile(null);
+    onChange?.(null);
+    onRemove?.();
+  }
+
+  return (
+    <div className="space-y-2">
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        onChange={handleFile}
+        className="hidden"
+        aria-label={label}
+      />
+      {preview ? (
+        <div className="relative group">
+          <img
+            src={preview}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded-2xl border border-forest/10"
+          />
+          <button
+            type="button"
+            onClick={handleRemove}
+            className="absolute top-2 right-2 p-2 rounded-full bg-rose text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+            aria-label="Xoá ảnh"
+          >
+            <X size={16} />
+          </button>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="w-full h-48 rounded-2xl border-2 border-dashed border-forest/20 bg-forest/5 hover:bg-forest/10 hover:border-forest/40 transition-colors flex flex-col items-center justify-center gap-2 cursor-pointer"
+        >
+          <svg className="w-8 h-8 text-forest/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span className="text-sm text-forest/60 font-medium">{label}</span>
+        </button>
+      )}
+    </div>
   );
 }

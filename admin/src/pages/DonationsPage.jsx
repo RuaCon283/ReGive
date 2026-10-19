@@ -58,7 +58,7 @@ export default function DonationsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Quyên góp"
         title="Quyên góp"
         description="Xử lý quyên góp tiền/sản phẩm. Sản phẩm có thể intake vào kho để đánh giá."
       />

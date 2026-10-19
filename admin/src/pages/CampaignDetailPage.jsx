@@ -14,6 +14,7 @@ import {
   TableSkeleton,
   Textarea,
 } from '../components/ui';
+import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { LABELS } from '../lib/constants';
 import { displayName, formatDate, formatDateOnly, formatVnd, oid } from '../lib/format';
@@ -25,6 +26,7 @@ const linkClass =
 export default function CampaignDetailPage() {
   const { id } = useParams();
   const toast = useToast();
+  const { isAdmin } = useAuth();
 
   const campaignQ = useAsync(() => campaignApi.get(id), [id]);
   const donationsQ = useAsync(() => campaignApi.donations(id), [id]);
@@ -94,6 +96,8 @@ export default function CampaignDetailPage() {
             )}
           </Card>
 
+          {/* Chỉ ADMIN mới thêm được cập nhật hoạt động — nhất quán với quyền sửa/xoá chiến dịch */}
+          {isAdmin && (
           <Card>
             <h2 className="font-display text-xl">Thêm cập nhật hoạt động</h2>
             <form className="mt-3 space-y-3" onSubmit={submitActivity}>
@@ -110,6 +114,7 @@ export default function CampaignDetailPage() {
               </div>
             </form>
           </Card>
+          )}
 
           <Card>
             <h2 className="font-display text-xl">Nhật ký hoạt động</h2>

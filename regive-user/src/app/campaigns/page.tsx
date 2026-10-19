@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Input, Select, Button, Alert } from 'antd';
+import { Select, Button, Alert } from 'antd';
 import {
-  Search,
   RefreshCw,
   Plus,
   Sparkles,
@@ -14,6 +13,7 @@ import { Campaign } from '@/types';
 import { CampaignCard } from '@/components/shared/CampaignCard';
 import { CardSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
+import { SearchInput } from '@/components/shared/SearchInput';
 import { CampaignQuickViewDrawer } from '@/components/campaigns/CampaignQuickViewDrawer';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
@@ -50,7 +50,8 @@ export default function CampaignsPage() {
     try {
       setLoading(true);
       setError(null);
-      const data = await campaignService.listPublic();
+      // Luôn chỉ lấy chiến dịch đang hoạt động cho trang công khai
+      const data = await campaignService.listPublic({ status: 'active' });
       setCampaigns(data);
     } catch (err: any) {
       setError(err.message || 'Không thể tải danh sách chiến dịch');
@@ -103,7 +104,11 @@ export default function CampaignsPage() {
           return pB - pA;
         }
         if (sortBy === 'urgent') {
-          // nearest end date
+          // Ưu tiên theo mức khẩn cấp thật (emergency > urgent > normal), tie-break bằng ngày kết thúc gần nhất
+          const urgencyRank: Record<string, number> = { emergency: 0, urgent: 1, normal: 2 };
+          const uA = urgencyRank[a.urgency ?? 'normal'] ?? 2;
+          const uB = urgencyRank[b.urgency ?? 'normal'] ?? 2;
+          if (uA !== uB) return uA - uB;
           return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
         }
         if (sortBy === 'targetAsc') {
@@ -116,17 +121,17 @@ export default function CampaignsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Page Header with Action Button & Live Stats */}
-      <div className="bg-gradient-to-r from-p-s800 via-sec-s900 to-slate-900 text-white rounded-3xl p-8 sm:p-10 shadow-xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-p-s100 via-sec-s50 to-i-s50 rounded-3xl p-8 sm:p-10 shadow-md relative overflow-hidden border-2 border-p-s200/30">
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-p-s500/20 text-p-s300 text-xs font-bold border border-p-s500/30">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-p-s100 text-p-s700 text-xs font-bold border border-p-s200">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Nền tảng thiện nguyện tuần hoàn ReGive</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-black text-n-s900 tracking-tight">
               Chiến Dịch Thiện Nguyện
             </h1>
-            <p className="text-p-s100/90 text-sm leading-relaxed">
+            <p className="text-n-s500 text-sm leading-relaxed">
               Khám phá và đồng hành cùng các hoạt động gây quỹ, quyên góp hiện vật và kêu gọi tình nguyện viên đang diễn ra trên khắp cả nước.
             </p>
           </div>
@@ -134,7 +139,7 @@ export default function CampaignsPage() {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <Link
               href="/campaigns/create"
-              className="inline-flex h-12 items-center justify-center gap-2 px-6 rounded-2xl bg-p-s500 hover:bg-p-s400 text-slate-950 font-bold text-sm shadow-lg shadow-p-s500/30 border-0 transition-colors"
+              className="inline-flex h-12 items-center justify-center gap-2 px-6 rounded-2xl bg-p-s500 hover:bg-p-s400 text-white font-bold text-sm shadow-md border-0 transition-colors"
             >
               <Plus className="w-4 h-4" />
               <span>Đề xuất chiến dịch mới</span>
@@ -143,18 +148,18 @@ export default function CampaignsPage() {
         </div>
 
         {/* Live Aggregates Strip */}
-        <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+        <div className="mt-8 pt-6 border-t border-p-s200/40 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
           <div>
-            <span className="text-p-s300 block mb-0.5">Chiến dịch đang gây quỹ:</span>
-            <strong className="text-white text-lg font-black">{campaigns.length} dự án</strong>
+            <span className="text-n-s400 block mb-0.5">Chiến dịch đang gây quỹ:</span>
+            <strong className="text-p-s700 text-lg font-black">{campaigns.length} dự án</strong>
           </div>
           <div>
-            <span className="text-p-s300 block mb-0.5">Tổng nguồn lực đóng góp:</span>
-            <strong className="text-white text-lg font-black">{formatVND(totalRaised)}</strong>
+            <span className="text-n-s400 block mb-0.5">Tổng nguồn lực đóng góp:</span>
+            <strong className="text-p-s700 text-lg font-black">{formatVND(totalRaised)}</strong>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <span className="text-p-s300 block mb-0.5">Quy trình kiểm định:</span>
-            <strong className="text-white text-lg font-black">100% Minh bạch</strong>
+            <span className="text-n-s400 block mb-0.5">Quy trình kiểm định:</span>
+            <strong className="text-p-s700 text-lg font-black">100% Minh bạch</strong>
           </div>
         </div>
       </div>
@@ -179,14 +184,10 @@ export default function CampaignsPage() {
       {/* Search & Multifaceted Filter Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
         <div className="flex-1">
-          <Input
+          <SearchInput
             placeholder="Tìm theo tên chiến dịch, mục tiêu, tổ chức hoặc địa phương..."
-            prefix={<Search className="w-4 h-4 text-gray-400 mr-1" />}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            allowClear
-            size="large"
-            className="!rounded-xl"
+            onChange={setSearchQuery}
           />
         </div>
 

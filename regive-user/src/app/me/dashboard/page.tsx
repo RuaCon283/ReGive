@@ -295,27 +295,27 @@ export default function UserDashboardPage() {
         </div>
 
         {/* Quick Action Shortcuts */}
-        <div className="bg-p-s900 rounded-3xl p-6 sm:p-8 text-white shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="bg-gradient-to-r from-p-s50 via-sec-s50 to-i-s50 rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-p-s200/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold">Chung tay lan tỏa yêu thương</h3>
-            <p className="text-xs text-slate-300 max-w-md">
+            <h3 className="text-lg font-bold text-n-s900">Chung tay lan tỏa yêu thương</h3>
+            <p className="text-xs text-n-s500 max-w-md">
               Bạn có thể tiếp tục ủng hộ tiền mặt, trao tặng hiện vật còn tốt hoặc tham gia các sự kiện tình nguyện mới nhất.
             </p>
           </div>
           <div className="flex flex-wrap gap-2.5">
             <Link href="/campaigns">
-              <Button className="h-10 rounded-xl bg-sec-s500 hover:bg-sec-s600 text-white font-bold border-0">
+              <Button type="primary" className="h-10 rounded-xl bg-p-s500 hover:bg-p-s600 text-white font-bold border-0">
                 Ủng hộ chiến dịch
               </Button>
             </Link>
             <Link href="/marketplace">
-              <Button className="h-10 rounded-xl border border-white/30 text-white font-semibold hover:border-white bg-transparent">
+              <Button className="h-10 rounded-xl border-2 border-p-s300 text-p-s700 font-semibold hover:border-p-s400 bg-white">
                 Chợ vật phẩm
               </Button>
             </Link>
             {user?.role === 'BENEFICIARY' && (
               <Link href="/support/new">
-                <Button className="h-10 rounded-xl bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold border-0">
+                <Button className="h-10 rounded-xl bg-w-s500 hover:bg-w-s600 text-white font-bold border-0">
                   + Tạo yêu cầu hỗ trợ
                 </Button>
               </Link>

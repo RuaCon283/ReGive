@@ -20,11 +20,6 @@ export const orderService = {
     return res.data.data.orders;
   },
 
-  async getById(id: string): Promise<Order> {
-    const res = await apiClient.get<ApiResponse<{ order: Order }>>(`/orders/${id}`);
-    return res.data.data.order;
-  },
-
   async cancelOrder(id: string, reason?: string): Promise<Order> {
     const res = await apiClient.patch<ApiResponse<{ order: Order }>>(`/orders/${id}/cancel`, { reason });
     return res.data.data.order;

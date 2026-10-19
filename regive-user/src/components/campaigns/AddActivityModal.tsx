@@ -70,7 +70,7 @@ export const AddActivityModal: React.FC<AddActivityModalProps> = ({
       open={open}
       onCancel={onClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       centered
       className="rounded-2xl"
     >

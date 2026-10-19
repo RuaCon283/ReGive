@@ -82,7 +82,7 @@ export const EditCampaignModal: React.FC<EditCampaignModalProps> = ({
       open={open}
       onCancel={onClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       width={600}
       className="rounded-2xl"
     >

@@ -16,7 +16,7 @@ export function Providers({ children }: ProvidersProps) {
           colorPrimary: "#024870",
           colorInfo: "#0aa3d6",
           borderRadius: 10,
-          fontFamily: "var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          fontFamily: "var(--font-be-vietnam-pro), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         },
         components: {
           Button: {

@@ -34,6 +34,7 @@ import {
 } from 'lucide-react';
 import { marketplaceService } from '@/services/marketplaceService';
 import { orderService } from '@/services/orderService';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 import { paymentService } from '@/services/paymentService';
 import { Product } from '@/types';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -181,9 +182,11 @@ export default function ProductDetailPage() {
     product.storageLocation ||
     'Trạm tiếp nhận & điều phối ReGive Trung Tâm';
 
-  // Quality score & inspection
-  const inspectionScore = product.inspectionReport?.score || 9.5;
-  const inspectorName = product.inspectionReport?.inspectorName || 'Hội đồng giám định ReGive';
+  // Quality score & inspection — chỉ dùng dữ liệu kiểm định thật, không bịa điểm mặc định
+  const inspectionScore = product.inspectionReport?.score;
+  const inspectorName =
+    product.inspectionReport?.inspectorName ||
+    (typeof product.reviewedBy === 'object' ? product.reviewedBy?.fullName : null);
   const inspectedDate = product.inspectionReport?.inspectedAt || product.reviewedAt || product.createdAt;
 
   // Tabs items definition
@@ -309,9 +312,13 @@ export default function ProductDetailPage() {
             <div className="flex items-center gap-3 bg-white/90 px-4 py-2.5 rounded-2xl border border-p-s200 shadow-sm shrink-0">
               <div className="text-right">
                 <span className="text-[10px] uppercase font-bold text-gray-400 block">Điểm thẩm định</span>
-                <span className="text-xs font-semibold text-p-s800">Đạt chuẩn A+</span>
+                <span className="text-xs font-semibold text-p-s800">
+                  {inspectionScore != null ? 'Đạt chuẩn A+' : 'Chưa có điểm'}
+                </span>
               </div>
-              <span className="text-2xl font-black text-p-s700">{inspectionScore}/10</span>
+              <span className="text-2xl font-black text-p-s700">
+                {inspectionScore != null ? `${inspectionScore}/10` : '—'}
+              </span>
             </div>
           </div>
 
@@ -324,7 +331,7 @@ export default function ProductDetailPage() {
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
                 {product.inspectionReport?.conditionDetails ||
-                  'Sản phẩm còn rất nguyên vẹn, ngoại hình đẹp mắt, không có hư hỏng vật lý nghiêm trọng.'}
+                  'Đang chờ cập nhật biên bản kiểm định chi tiết từ đội ngũ ReGive.'}
               </p>
             </div>
 
@@ -335,7 +342,7 @@ export default function ProductDetailPage() {
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
                 {product.inspectionReport?.functionalityStatus ||
-                  'Đã test công năng hoạt động tốt 100%, sẵn sàng sử dụng ngay.'}
+                  'Đang chờ cập nhật kết quả kiểm tra công năng từ đội ngũ ReGive.'}
               </p>
             </div>
 
@@ -346,7 +353,7 @@ export default function ProductDetailPage() {
               </span>
               <p className="text-gray-700 text-xs leading-relaxed">
                 {product.inspectionReport?.sanitizationStatus ||
-                  'Đã được làm sạch chuyên sâu và khử khuẩn bằng tia cực tím UV-C trước khi nhập kho.'}
+                  'Đang chờ cập nhật quy trình vệ sinh & khử trùng từ đội ngũ ReGive.'}
               </p>
             </div>
 
@@ -364,7 +371,11 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-gray-500">Đầy đủ phụ kiện tiêu chuẩn đi kèm theo mô tả.</p>
+                <p className="text-xs text-gray-500">
+                {product.inspectionReport
+                  ? 'Đầy đủ phụ kiện tiêu chuẩn đi kèm theo mô tả.'
+                  : 'Đang chờ cập nhật danh sách phụ kiện kèm theo.'}
+              </p>
               )}
             </div>
           </div>
@@ -399,10 +410,17 @@ export default function ProductDetailPage() {
 
           {/* Inspector Sign-off info */}
           <div className="flex flex-wrap items-center justify-between text-xs text-gray-500 bg-slate-50 p-4 rounded-xl border border-slate-100">
-            <span className="flex items-center gap-1.5">
-              <UserCheck className="w-4 h-4 text-p-s600" />
-              Chuyên viên giám định: <strong className="text-gray-800">{inspectorName}</strong>
-            </span>
+              {inspectorName ? (
+                <span className="flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-p-s600" />
+                  Chuyên viên giám định: <strong className="text-gray-800">{inspectorName}</strong>
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5">
+                  <UserCheck className="w-4 h-4 text-p-s600" />
+                  Chuyên viên giám định: <strong className="text-gray-800">Đang cập nhật</strong>
+                </span>
+              )}
             <span className="flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-gray-400" />
               Ngày kiểm định: {formatDate(inspectedDate)}
@@ -862,11 +880,13 @@ export default function ProductDetailPage() {
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         footer={null}
-        destroyOnClose
+        destroyOnHidden
         className="rounded-2xl"
       >
         <div className="py-4 space-y-4">
           {orderError && <Alert message="Lỗi đặt hàng" description={orderError} type="error" showIcon />}
+
+          <VerifyEmailNotice />
 
           <Form
             layout="vertical"

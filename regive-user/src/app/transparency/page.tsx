@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Table, Tag, Input, Select, Button, Card, Statistic, Alert } from 'antd';
 import {
   ShieldCheck,
-  Search,
   ArrowDownLeft,
   ArrowUpRight,
   Filter,
@@ -20,6 +19,7 @@ import {
 import { reportService } from '@/services/reportService';
 import { TransparencyLedgerData, TransparencyTransaction } from '@/types';
 import { formatVND, formatDateTime } from '@/lib/format';
+import { SearchInput } from '@/components/shared/SearchInput';
 
 export default function TransparencyPage() {
   const [data, setData] = useState<TransparencyLedgerData | null>(null);
@@ -143,14 +143,16 @@ export default function TransparencyPage() {
       key: 'amount',
       align: 'right' as const,
       width: 160,
-      render: (val: number, record: TransparencyTransaction) => (
+      render: (val: number | null, record: TransparencyTransaction) => (
         <div className="text-right">
           <span
             className={`font-black text-sm sm:text-base font-mono ${
               record.direction === 'INFLOW' ? 'text-p-s700' : 'text-rose-600'
             }`}
           >
-            {record.direction === 'INFLOW' ? '+' : '-'} {formatVND(val)}
+            {val == null
+              ? 'Đang cập nhật'
+              : `${record.direction === 'INFLOW' ? '+' : '-'} ${formatVND(val)}`}
           </span>
           <span className="block text-[10px] text-gray-400 mt-0.5">
             {record.proofType}
@@ -163,16 +165,16 @@ export default function TransparencyPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-p-s900 via-sec-s900 to-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-p-s100 via-sec-s50 to-i-s50 rounded-3xl p-8 sm:p-10 relative overflow-hidden border-2 border-p-s200/30 shadow-md">
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-p-s500/20 text-p-s300 text-xs font-bold border border-p-s500/30">
-            <ShieldCheck className="w-4 h-4 text-p-s400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-p-s100 text-p-s700 text-xs font-bold border border-p-s200">
+            <ShieldCheck className="w-4 h-4 text-p-s600" />
             <span>Sổ cái Thời gian thực (Real-time Transparency Ledger)</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight text-n-s900">
             Minh Bạch Tuyệt Đối Nguồn Lực Thiện Nguyện
           </h1>
-          <p className="text-p-s100 text-sm leading-relaxed">
+          <p className="text-n-s500 text-sm leading-relaxed">
             ReGive cam kết công khai 100% dòng tiền quyên góp, doanh thu bán vật phẩm tuần hoàn từ Marketplace và các khoản giải ngân thực địa.
           </p>
         </div>
@@ -229,14 +231,10 @@ export default function TransparencyPage() {
       {/* Filter and Search Bar */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between">
         <div className="flex-1">
-          <Input
+          <SearchInput
             placeholder="Tìm theo mã giao dịch, tên đối tác hoặc chiến dịch..."
-            prefix={<Search className="w-4 h-4 text-gray-400 mr-1" />}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            allowClear
-            size="large"
-            className="!rounded-xl"
+            onChange={setSearch}
           />
         </div>
 

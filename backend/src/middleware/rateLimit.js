@@ -22,4 +22,16 @@ const apiLimiter = rateLimit({
   },
 });
 
-module.exports = { authLimiter, apiLimiter };
+// Giới hạn riêng cho endpoint AI công khai (tốn chi phí gọi model AI)
+const aiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Bạn đã dùng hết lượt thử AI trong phút này. Vui lòng thử lại sau.',
+  },
+});
+
+module.exports = { authLimiter, apiLimiter, aiLimiter };

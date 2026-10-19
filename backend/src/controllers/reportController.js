@@ -151,12 +151,12 @@ const publicImpact = asyncHandler(async (_req, res) => {
   }));
 
   return success(res, {
-    totalRaised: moneyStats[0]?.total || 38500000,
-    totalDonations: totalDonations || 48,
-    totalCampaigns: totalCampaigns || 6,
-    activeCampaigns: activeCampaigns || 5,
-    totalProducts: totalProducts || 12,
-    totalVolunteers: totalVolunteers || 15,
+    totalRaised: moneyStats[0]?.total || 0,
+    totalDonations: totalDonations || 0,
+    totalCampaigns: totalCampaigns || 0,
+    activeCampaigns: activeCampaigns || 0,
+    totalProducts: totalProducts || 0,
+    totalVolunteers: totalVolunteers || 0,
     topDonors: sanitizedTopDonors,
     recentDonations: sanitizedRecent,
   });
@@ -222,7 +222,9 @@ const transparencyLedger = asyncHandler(async (_req, res) => {
       direction: 'OUTFLOW',
       category: 'BENEFICIARY_DISBURSEMENT',
       title: `Giải ngân cứu trợ: ${s.title}`,
-      amount: 1500000,
+      // Không bịa số tiền giải ngân: hồ sơ cứu trợ hiện chưa có trường số tiền thực tế.
+      // Trả về null để frontend hiển thị "Đang cập nhật" và loại khỏi tổng OUTFLOW.
+      amount: null,
       partner: s.beneficiary?.fullName || 'Người thụ hưởng',
       campaignTitle: s.campaign?.title || 'Chương trình trợ cấp ReGive',
       campaignId: s.campaign?._id,
@@ -237,8 +239,8 @@ const transparencyLedger = asyncHandler(async (_req, res) => {
     .filter((t) => t.direction === 'INFLOW')
     .reduce((sum, t) => sum + (t.amount || 0), 0);
   const totalOutflow = transactions
-    .filter((t) => t.direction === 'OUTFLOW')
-    .reduce((sum, t) => sum + (t.amount || 0), 0);
+    .filter((t) => t.direction === 'OUTFLOW' && typeof t.amount === 'number')
+    .reduce((sum, t) => sum + t.amount, 0);
 
   return success(res, {
     summary: {

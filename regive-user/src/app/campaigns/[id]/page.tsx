@@ -43,6 +43,7 @@ import { formatVND, formatDate, calculateProgress } from '@/lib/format';
 import { StatusBadge } from '@/components/shared/StatusBadge';
 import { DetailSkeleton } from '@/components/shared/LoadingSkeleton';
 import { CommentSection } from '@/components/shared/CommentSection';
+import { Timeline } from '@/components/shared/Timeline';
 import { QuickDonateModal } from '@/components/campaigns/QuickDonateModal';
 import { QuickVolunteerModal } from '@/components/campaigns/QuickVolunteerModal';
 import { AddActivityModal } from '@/components/campaigns/AddActivityModal';
@@ -203,41 +204,17 @@ export default function CampaignDetailPage() {
 
           {/* Timeline Milestones Section */}
           {campaign.timeline && campaign.timeline.length > 0 && (
-            <div className="space-y-4">
-              <h4 className="font-extrabold text-gray-900 text-base flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-p-s600" />
-                Lộ trình triển khai theo các giai đoạn (Milestones)
-              </h4>
-              <div className="relative border-l-2 border-p-s200 ml-4 pl-6 space-y-6">
-                {campaign.timeline.map((tl, i) => (
-                  <div key={i} className="relative group">
-                    <span
-                      className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-4 border-white shadow-xs ${
-                        tl.status === 'completed'
-                          ? 'bg-p-s600'
-                          : tl.status === 'in_progress'
-                          ? 'bg-amber-500 animate-pulse'
-                          : 'bg-gray-300'
-                      }`}
-                    />
-                    <div className="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm space-y-2">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          {tl.phase && (
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-p-s700 bg-p-s50 px-2.5 py-0.5 rounded-md">
-                              {tl.phase}
-                            </span>
-                          )}
-                          <h5 className="font-bold text-gray-900 text-sm">{tl.title}</h5>
-                        </div>
-                        <span className="text-xs text-gray-400 font-mono">{tl.date}</span>
-                      </div>
-                      <p className="text-xs text-gray-600 leading-relaxed">{tl.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Timeline
+              title="Lộ trình triển khai theo các giai đoạn (Milestones)"
+              icon={<Calendar className="w-4 h-4 text-p-s600" />}
+              items={campaign.timeline.map((tl) => ({
+                phase: tl.phase,
+                title: tl.title,
+                date: tl.date,
+                description: tl.description,
+                status: tl.status as any,
+              }))}
+            />
           )}
 
           {/* Donation Guidelines */}
@@ -281,48 +258,48 @@ export default function CampaignDetailPage() {
         <div className="space-y-8 pt-3">
           {/* Official Bank Account & QR Helper Box */}
           {campaign.bankAccount && (
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-5">
+            <div className="bg-gradient-to-br from-p-s50 to-sec-s50 border border-p-s200 text-n-s900 rounded-3xl p-6 sm:p-8 shadow-md space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <span className="text-xs font-bold text-p-s400 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-p-s600 uppercase tracking-wider flex items-center gap-1.5">
                     <Landmark className="w-4 h-4" />
                     Tài khoản tiếp nhận minh bạch chính thức
                   </span>
-                  <h4 className="text-lg font-black text-white">{campaign.bankAccount.bankName}</h4>
+                  <h4 className="text-lg font-black text-p-s900">{campaign.bankAccount.bankName}</h4>
                 </div>
                 <Tag color="cyan" className="font-bold text-xs px-3 py-1 rounded-full border-0 m-0">
                   Sao kê tự động 24/7
                 </Tag>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-700/80 text-sm">
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Số tài khoản thiện nguyện:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-p-s200 text-sm">
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Số tài khoản thiện nguyện:</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-base font-mono font-black text-p-s300">
+                    <span className="text-base font-mono font-black text-p-s700">
                       {campaign.bankAccount.accountNumber || '9999REGIVE'}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleCopyBankAccount(campaign.bankAccount?.accountNumber || '9999REGIVE', 'Số tài khoản')}
-                      className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                      className="text-n-s400 hover:text-p-s600 p-1 rounded-md transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Tên chủ tài khoản:</span>
-                  <span className="text-sm font-bold text-white block truncate">
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Tên chủ tài khoản:</span>
+                  <span className="text-sm font-bold text-n-s900 block truncate">
                     {campaign.bankAccount.accountHolder || 'QUY THIEN NGUYEN REGIVE'}
                   </span>
                 </div>
 
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Cú pháp chuyển khoản:</span>
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Cú pháp chuyển khoản:</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-amber-300 truncate">
+                    <span className="text-xs font-mono font-bold text-amber-600 truncate">
                       REGIVE {campaign._id.slice(-6).toUpperCase()}
                     </span>
                     <button
@@ -330,7 +307,7 @@ export default function CampaignDetailPage() {
                       onClick={() =>
                         handleCopyBankAccount(`REGIVE ${campaign._id.slice(-6).toUpperCase()}`, 'Cú pháp chuyển khoản')
                       }
-                      className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                      className="text-n-s400 hover:text-p-s600 p-1 rounded-md transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>
@@ -885,36 +862,52 @@ export default function CampaignDetailPage() {
               </div>
             </div>
 
-            {/* Quick Action CTA Buttons */}
+            {/* Quick Action CTA Buttons — chỉ mở ủng hộ khi chiến dịch đang hoạt động */}
             <div className="space-y-3 pt-1">
-              <Button
-                type="primary"
-                size="large"
-                icon={<Heart className="w-4 h-4 fill-white" />}
-                onClick={() => setDonateModalOpen(true)}
-                className="w-full h-14 rounded-2xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-xl shadow-p-s600/25 transition-all"
-              >
-                Ủng hộ tiền trực tuyến
-              </Button>
+              {campaign.status === 'active' ? (
+                <>
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<Heart className="w-4 h-4 fill-white" />}
+                    onClick={() => setDonateModalOpen(true)}
+                    className="w-full h-14 rounded-2xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-xl shadow-p-s600/25 transition-all"
+                  >
+                    Ủng hộ tiền trực tuyến
+                  </Button>
 
-              <Link href={`/campaigns/${campaign._id}/donate-product`} className="block">
-                <Button
-                  size="large"
-                  icon={<Package className="w-4 h-4 text-sec-s600" />}
-                  className="w-full h-12 rounded-xl border border-sec-s200 hover:border-sec-s500 text-sec-s800 font-bold text-sm bg-sec-s50/50 hover:bg-sec-s50 transition-all"
-                >
-                  Ủng hộ hiện vật (Đồ cũ/Mới)
-                </Button>
-              </Link>
+                  <Link href={`/campaigns/${campaign._id}/donate-product`} className="block">
+                    <Button
+                      size="large"
+                      icon={<Package className="w-4 h-4 text-sec-s600" />}
+                      className="w-full h-12 rounded-xl border border-sec-s200 hover:border-sec-s500 text-sec-s800 font-bold text-sm bg-sec-s50/50 hover:bg-sec-s50 transition-all"
+                    >
+                      Ủng hộ hiện vật (Đồ cũ/Mới)
+                    </Button>
+                  </Link>
 
-              <Button
-                size="large"
-                icon={<HandHeart className="w-4 h-4 text-sky-600" />}
-                onClick={() => setVolunteerModalOpen(true)}
-                className="w-full h-12 rounded-xl border border-sky-200 hover:border-sky-500 text-sky-800 font-bold text-sm bg-sky-50/50 hover:bg-sky-50 transition-all"
-              >
-                Đăng ký Tình nguyện viên
-              </Button>
+                  <Button
+                    size="large"
+                    icon={<HandHeart className="w-4 h-4 text-sky-600" />}
+                    onClick={() => setVolunteerModalOpen(true)}
+                    className="w-full h-12 rounded-xl border border-sky-200 hover:border-sky-500 text-sky-800 font-bold text-sm bg-sky-50/50 hover:bg-sky-50 transition-all"
+                  >
+                    Đăng ký Tình nguyện viên
+                  </Button>
+                </>
+              ) : (
+                <Alert
+                  type={campaign.status === 'cancelled' ? 'error' : 'info'}
+                  showIcon
+                  message={
+                    campaign.status === 'closed'
+                      ? 'Chiến dịch đã kết thúc — cảm ơn bạn đã đồng hành cùng ReGive.'
+                      : campaign.status === 'cancelled'
+                        ? 'Chiến dịch đã bị huỷ và không nhận ủng hộ mới.'
+                        : 'Chiến dịch đang ở trạng thái nháp, chưa mở nhận ủng hộ.'
+                  }
+                />
+              )}
             </div>
 
             {/* Micro reassurance badges */}

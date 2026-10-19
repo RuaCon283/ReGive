@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Ban, Rocket } from 'lucide-react';
+import { Ban, Rocket, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { productApi } from '../api/client';
 import {
   Badge,
   Card,
+  ConfirmDialog,
   DataState,
   FilterSelect,
   PageHeader,
@@ -22,6 +23,23 @@ export default function ProductsPage() {
   const { data, loading, error, reload } = useAsync(() => productApi.list({ status }), [status]);
   const products = data?.data?.products || [];
   const [busy, setBusy] = useState('');
+  const [deleting, setDeleting] = useState(null);
+  const [deleteBusy, setDeleteBusy] = useState(false);
+
+  async function confirmDelete() {
+    if (!deleting) return;
+    setDeleteBusy(true);
+    try {
+      await productApi.remove(oid(deleting));
+      toast.success('Đã xoá sản phẩm');
+      setDeleting(null);
+      reload();
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setDeleteBusy(false);
+    }
+  }
 
   async function togglePublish(row) {
     setBusy(oid(row));
@@ -40,7 +58,7 @@ export default function ProductsPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Sản phẩm"
         title="Sản phẩm"
         description="Intake → đánh giá (thủ công hoặc AI) → nhập kho → publish. AI không tự đăng bán."
       />
@@ -114,6 +132,16 @@ export default function ProductsPage() {
                       {row.listedOnMarketplace ? <Ban size={16} /> : <Rocket size={16} />}
                       {row.listedOnMarketplace ? 'Gỡ bán' : 'Đăng bán'}
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeleting(row)}
+                      title="Xoá sản phẩm"
+                      aria-label="Xoá sản phẩm"
+                      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-sm font-medium text-rose hover:bg-rose/10 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose"
+                    >
+                      <Trash2 size={16} />
+                      Xoá
+                    </button>
                   </div>
                 ),
               },
@@ -121,6 +149,20 @@ export default function ProductsPage() {
           />
         </Card>
       </DataState>
+
+      <ConfirmDialog
+        open={Boolean(deleting)}
+        title="Xoá sản phẩm"
+        description={
+          deleting
+            ? `Xoá sản phẩm "${deleting.name}"? Hành động này không thể hoàn tác. Sản phẩm đang bán hoặc đã có đơn hàng sẽ bị chặn xoá.`
+            : ''
+        }
+        confirmLabel="Xoá"
+        busy={deleteBusy}
+        onConfirm={confirmDelete}
+        onClose={() => setDeleting(null)}
+      />
     </div>
   );
 }

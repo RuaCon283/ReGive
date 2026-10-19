@@ -274,23 +274,30 @@ export default function HomePage() {
       {/* ── Impact Stats Banner ── */}
       <section className="px-6 -translate-y-10 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-br from-p-s900 via-p-s800 to-p-s950 rounded-3xl p-8 sm:p-12 shadow-2xl border border-white/10 grid grid-cols-2 md:grid-cols-4 gap-8 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-white via-p-s50 to-sec-s50 rounded-3xl p-8 sm:p-12 shadow-lg border-2 border-p-s200/40 grid grid-cols-2 md:grid-cols-4 gap-8 relative overflow-hidden">
             {/* Decorative glow */}
             <div
               aria-hidden="true"
-              className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.25)_0%,transparent_70%)] pointer-events-none"
+              className="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.15)_0%,transparent_70%)] pointer-events-none"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-[radial-gradient(circle,rgba(2,72,112,0.06)_0%,transparent_70%)] pointer-events-none"
             />
             {[
-              { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', colorClass: 'text-p-s400' },
-              { value: formatVND(impactData?.totalRaised || 385000000), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-sec-s400', isFormatted: true },
-              { value: impactData?.totalDonations || 148, label: 'Lượt đóng góp thành công', colorClass: 'text-sec-s300' },
-              { value: impactData?.totalVolunteers || 24, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-sec-s300' },
+              { value: impactData?.totalCampaigns || campaigns.length, label: 'Chiến dịch thiện nguyện', colorClass: 'text-p-s700', iconBg: 'bg-p-s100', icon: <Sparkles className="w-5 h-5 text-p-s600" /> },
+              { value: formatVND(impactData?.totalRaised || 0), label: 'Tổng nguồn lực quyên góp', colorClass: 'text-sec-s700', isFormatted: true, iconBg: 'bg-sec-s100', icon: <TrendingUp className="w-5 h-5 text-sec-s600" /> },
+              { value: impactData?.totalDonations || 0, label: 'Lượt đóng góp thành công', colorClass: 'text-i-s700', iconBg: 'bg-i-s100', icon: <Heart className="w-5 h-5 text-i-s600" /> },
+              { value: impactData?.totalVolunteers || 0, label: 'Tình nguyện viên đã xác nhận', colorClass: 'text-s-s700', iconBg: 'bg-s-s100', icon: <Users className="w-5 h-5 text-s-s600" /> },
             ].map((stat, idx) => (
               <div key={idx} className="text-center relative z-10">
-                <span className={`block font-bold ${stat.isFormatted ? 'text-xl sm:text-2xl' : 'text-3xl sm:text-4xl'} ${stat.colorClass} leading-tight mb-1.5`}>
+                <div className={`w-11 h-11 rounded-2xl ${stat.iconBg} flex items-center justify-center mx-auto mb-2.5 shadow-sm border border-white/80`}>
+                  {stat.icon}
+                </div>
+                <span className={`block font-black ${stat.isFormatted ? 'text-xl sm:text-2xl' : 'text-3xl sm:text-4xl'} ${stat.colorClass} leading-tight mb-1.5`}>
                   {stat.value}
                 </span>
-                <span className="text-xs sm:text-sm text-slate-300 font-medium leading-snug block">
+                <span className="text-xs sm:text-sm text-n-s500 font-medium leading-snug block">
                   {stat.label}
                 </span>
               </div>
@@ -446,22 +453,22 @@ export default function HomePage() {
       {impactData?.topDonors && impactData.topDonors.length > 0 && (
         <section className="py-12 px-6">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-gradient-to-br from-n-s900 via-n-s800 to-stone-950 rounded-3xl p-8 sm:p-14 relative overflow-hidden border border-white/10 shadow-2xl text-white">
+            <div className="bg-gradient-to-br from-w-s50 via-yellow-50 to-amber-50 rounded-3xl p-8 sm:p-14 relative overflow-hidden border-2 border-w-s200/40 shadow-lg">
               {/* Glow */}
               <div
                 aria-hidden="true"
-                className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.18)_0%,transparent_70%)] pointer-events-none"
+                className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.12)_0%,transparent_70%)] pointer-events-none"
               />
 
               <div className="max-w-lg mb-9 relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 text-xs font-extrabold tracking-wider uppercase mb-4">
-                  <Award className="w-3.5 h-3.5 text-yellow-400" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-w-s100 border border-w-s200 text-w-s700 text-xs font-extrabold tracking-wider uppercase mb-4">
+                  <Award className="w-3.5 h-3.5 text-w-s600" />
                   Bảng vàng vinh danh
                 </div>
-                <h2 className="font-bold text-2xl sm:text-3xl text-white mb-2.5">
+                <h2 className="font-bold text-2xl sm:text-3xl text-n-s900 mb-2.5">
                   Những Trái Tim Vàng ReGive
                 </h2>
-                <p className="text-sm text-slate-300 m-0 leading-relaxed">
+                <p className="text-sm text-n-s500 m-0 leading-relaxed">
                   Tri ân các nhà hảo tâm và mạnh thường quân đã đồng hành cùng ReGive trao tặng yêu thương.
                 </p>
               </div>
@@ -470,28 +477,28 @@ export default function HomePage() {
                 {impactData.topDonors.map((donor, idx) => (
                   <div
                     key={idx}
-                    className="bg-white/[0.08] border border-white/15 rounded-2xl p-5 text-center transition-all duration-200 hover:bg-white/15 hover:-translate-y-1"
+                    className="bg-white border border-w-s100 rounded-2xl p-5 text-center transition-all duration-200 hover:shadow-md hover:-translate-y-1 shadow-sm"
                   >
                     <div
                       className={`w-11 h-11 rounded-2xl mx-auto mb-3 flex items-center justify-center font-black ${
                         idx === 0
-                          ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-white text-lg shadow-lg shadow-yellow-500/30'
+                          ? 'bg-gradient-to-br from-yellow-400 to-amber-500 text-white text-lg shadow-lg shadow-yellow-400/30'
                           : idx === 1
-                          ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white text-lg'
+                          ? 'bg-gradient-to-br from-gray-200 to-gray-400 text-white text-lg'
                           : idx === 2
-                          ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white text-lg'
-                          : 'bg-white/15 text-slate-200 text-sm'
+                          ? 'bg-gradient-to-br from-amber-500 to-amber-700 text-white text-lg'
+                          : 'bg-p-s100 text-p-s700 text-sm'
                       }`}
                     >
                       {idx === 0 ? '1' : idx === 1 ? '2' : idx === 2 ? '3' : `#${idx + 1}`}
                     </div>
-                    <h4 className="font-bold text-sm text-white mb-1.5 truncate">
+                    <h4 className="font-bold text-sm text-n-s800 mb-1.5 truncate">
                       {donor.name}
                     </h4>
-                    <p className="text-xs sm:text-sm font-black text-yellow-300 mb-1">
+                    <p className="text-xs sm:text-sm font-black text-w-s700 mb-1">
                       {formatVND(donor.totalAmount)}
                     </p>
-                    <span className="text-[11px] text-slate-300 block font-medium">{donor.count} lượt ủng hộ</span>
+                    <span className="text-[11px] text-n-s400 block font-medium">{donor.count} lượt ủng hộ</span>
                   </div>
                 ))}
               </div>
@@ -591,27 +598,27 @@ export default function HomePage() {
       {/* ── Volunteer CTA Banner ── */}
       <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-p-s900 via-p-s800 to-p-s900 p-8 sm:p-16 relative shadow-2xl border border-white/10">
+          <div className="rounded-3xl overflow-hidden bg-gradient-to-br from-p-s50 via-sec-s50 to-i-s50 p-8 sm:p-16 relative shadow-lg border-2 border-p-s200/30">
             {/* Decorative blobs */}
             <div
               aria-hidden="true"
-              className="float-med absolute -top-16 right-[10%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.25)_0%,transparent_70%)] pointer-events-none"
+              className="float-med absolute -top-16 right-[10%] w-60 h-60 rounded-full bg-[radial-gradient(circle,rgba(24,201,255,0.12)_0%,transparent_70%)] pointer-events-none"
             />
             <div
               aria-hidden="true"
-              className="absolute -bottom-10 left-[5%] w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(107,211,243,0.20)_0%,transparent_70%)] pointer-events-none"
+              className="absolute -bottom-10 left-[5%] w-44 h-44 rounded-full bg-[radial-gradient(circle,rgba(2,72,112,0.06)_0%,transparent_70%)] pointer-events-none"
             />
 
             <div className="max-w-2xl relative z-10">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-p-s500/20 border border-p-s500/35 text-p-s400 text-xs font-extrabold tracking-wider uppercase mb-5">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-p-s100 border border-p-s200 text-p-s700 text-xs font-extrabold tracking-wider uppercase mb-5">
                 <Smile className="w-3.5 h-3.5" />
                 Đồng hành cùng ReGive
               </span>
 
-              <h2 className="font-bold text-2xl sm:text-4xl text-white mb-4 leading-snug">
+              <h2 className="font-bold text-2xl sm:text-4xl text-n-s900 mb-4 leading-snug">
                 Trở Thành Tình Nguyện Viên ReGive Ngay Hôm Nay
               </h2>
-              <p className="text-sm sm:text-base text-p-s100 leading-relaxed mb-9">
+              <p className="text-sm sm:text-base text-n-s600 leading-relaxed mb-9">
                 Bạn có kỹ năng, thời gian hoặc trái tim nhiệt huyết? Hãy cùng chúng tôi tham gia phân loại vật phẩm,
                 tổ chức sự kiện và mang niềm vui đến cho các em nhỏ và gia đình cần giúp đỡ.
               </p>
@@ -626,7 +633,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/about"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-white/30 text-white text-sm sm:text-base font-bold no-underline bg-white/10 hover:border-white hover:bg-white/20 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-p-s300 text-p-s700 text-sm sm:text-base font-bold no-underline bg-white/70 hover:border-p-s400 hover:bg-white transition-colors shadow-sm"
                 >
                   Tìm hiểu thêm
                   <ArrowRight className="w-4 h-4" />

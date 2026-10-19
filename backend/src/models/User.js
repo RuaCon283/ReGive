@@ -40,6 +40,32 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // Email verification
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    emailVerificationExpires: {
+      type: Date,
+      default: null,
+      select: false,
+    },
+    // Password reset
+    resetPasswordToken: {
+      type: String,
+      default: null,
+      select: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      default: null,
+      select: false,
+    },
     // Extra fields for Beneficiary profile
     beneficiaryInfo: {
       householdSize: { type: Number, default: null },
@@ -66,6 +92,7 @@ userSchema.methods.toSafeObject = function toSafeObject() {
     address: this.address,
     role: this.role,
     isActive: this.isActive,
+    isEmailVerified: this.isEmailVerified,
     beneficiaryInfo: this.beneficiaryInfo,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,

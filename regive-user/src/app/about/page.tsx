@@ -97,9 +97,9 @@ export default function AboutPage() {
 
       {/* Call to action */}
       <section className="max-w-4xl mx-auto px-4 text-center">
-        <div className="bg-p-s900 text-white rounded-3xl p-10 space-y-4 shadow-xl">
-          <h3 className="text-2xl sm:text-3xl font-black">Cùng ReGive Tạo Nên Sự Khác Biệt</h3>
-          <p className="text-xs sm:text-sm text-p-s200 max-w-xl mx-auto">
+        <div className="bg-gradient-to-br from-p-s100 via-sec-s50 to-i-s50 rounded-3xl p-10 space-y-4 shadow-md border-2 border-p-s200/30">
+          <h3 className="text-2xl sm:text-3xl font-black text-n-s900">Cùng ReGive Tạo Nên Sự Khác Biệt</h3>
+          <p className="text-xs sm:text-sm text-n-s500 max-w-xl mx-auto">
             Mỗi hành động nhỏ đều góp phần thắp lên hy vọng cho một mảnh đời. Hãy chọn chiến dịch bạn quan tâm ngay hôm nay!
           </p>
           <div className="pt-2">

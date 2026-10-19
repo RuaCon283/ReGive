@@ -7,6 +7,7 @@ import { HandHeart, Sparkles, CheckCircle2, Info } from 'lucide-react';
 import { volunteerService } from '@/services/volunteerService';
 import { Campaign } from '@/types';
 import { useAuthStore } from '@/store/useAuthStore';
+import { VerifyEmailNotice } from '@/components/shared/VerifyEmailNotice';
 
 interface QuickVolunteerModalProps {
   campaign: Campaign | null;
@@ -80,7 +81,7 @@ export const QuickVolunteerModal: React.FC<QuickVolunteerModalProps> = ({
       open={open}
       onCancel={handleModalClose}
       footer={null}
-      destroyOnClose
+      destroyOnHidden
       centered
       className="rounded-2xl"
     >
@@ -113,6 +114,8 @@ export const QuickVolunteerModal: React.FC<QuickVolunteerModalProps> = ({
           />
         ) : (
           <div className="space-y-4">
+            <VerifyEmailNotice />
+
             {campaign.volunteerConditions && (
               <div className="bg-amber-50 border border-amber-200/80 p-3.5 rounded-xl flex items-start gap-2.5 text-xs text-amber-900">
                 <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />

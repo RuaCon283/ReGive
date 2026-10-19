@@ -1,8 +1,9 @@
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
+const crypto = require('crypto');
 const User = require('../models/User');
 const { ROLES } = require('../constants/enums');
 const { ApiError, success, asyncHandler } = require('../utils/api');
-const { signToken } = require('../services/common');
+const { signToken, sendVerificationEmail, sendPasswordResetEmail } = require('../services/common');
 
 const registerValidators = [
   body('email').isEmail().withMessage('Email không hợp lệ'),
@@ -28,11 +29,26 @@ const updateProfileValidators = [
 ];
 
 const updateUserRoleValidators = [
+  param('id').isMongoId().withMessage('ID người dùng không hợp lệ'),
   body('role').isIn(Object.values(ROLES)).withMessage('Vai trò không hợp lệ'),
 ];
 
 const updateUserStatusValidators = [
+  param('id').isMongoId().withMessage('ID người dùng không hợp lệ'),
   body('isActive').isBoolean().withMessage('Trạng thái không hợp lệ'),
+];
+
+const forgotPasswordValidators = [
+  body('email').isEmail().withMessage('Vui lòng nhập email hợp lệ'),
+];
+
+const resetPasswordValidators = [
+  body('token').notEmpty().withMessage('Token không hợp lệ'),
+  body('newPassword').isLength({ min: 6 }).withMessage('Mật khẩu mới phải có ít nhất 6 ký tự'),
+];
+
+const verifyEmailValidators = [
+  body('token').notEmpty().withMessage('Token xác thực không hợp lệ'),
 ];
 
 const register = asyncHandler(async (req, res) => {
@@ -43,6 +59,9 @@ const register = asyncHandler(async (req, res) => {
   }
 
   const passwordHash = await User.hashPassword(password);
+  const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+  const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+
   const user = await User.create({
     email,
     passwordHash,
@@ -50,10 +69,17 @@ const register = asyncHandler(async (req, res) => {
     phone: phone || '',
     address: address || '',
     role: role === ROLES.BENEFICIARY ? ROLES.BENEFICIARY : ROLES.USER,
+    emailVerificationToken,
+    emailVerificationExpires,
+  });
+
+  // Send verification email (non-blocking)
+  sendVerificationEmail(user, emailVerificationToken).catch((err) => {
+    console.warn('[Email] Gửi email xác thực thất bại:', err.message);
   });
 
   const token = signToken(user);
-  return success(res, { user: user.toSafeObject(), token }, 'Đăng ký thành công', 201);
+  return success(res, { user: user.toSafeObject(), token }, 'Đăng ký thành công. Vui lòng kiểm tra email để xác thực tài khoản.', 201);
 });
 
 const login = asyncHandler(async (req, res) => {
@@ -134,12 +160,106 @@ const updateUserStatus = asyncHandler(async (req, res) => {
   );
 });
 
+/* ─── Forgot Password ─── */
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email: email.toLowerCase() }).select('+resetPasswordToken +resetPasswordExpires');
+
+  if (!user) {
+    // Don't reveal whether the email exists
+    return success(res, null, 'Nếu email tồn tại trong hệ thống, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.');
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  await user.save();
+
+  // Send reset email (non-blocking)
+  sendPasswordResetEmail(user, resetToken).catch((err) => {
+    console.warn('[Email] Gửi email đặt lại mật khẩu thất bại:', err.message);
+  });
+
+  return success(res, null, 'Nếu email tồn tại trong hệ thống, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.');
+});
+
+/* ─── Reset Password ─── */
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: new Date() },
+  }).select('+resetPasswordToken +resetPasswordExpires +passwordHash');
+
+  if (!user) {
+    throw new ApiError(400, 'Token đặt lại mật khẩu không hợp lệ hoặc đã hết hạn');
+  }
+
+  user.passwordHash = await User.hashPassword(newPassword);
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+  await user.save();
+
+  return success(res, null, 'Đặt lại mật khẩu thành công. Vui lòng đăng nhập với mật khẩu mới.');
+});
+
+/* ─── Verify Email ─── */
+const verifyEmail = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+
+  const user = await User.findOne({
+    emailVerificationToken: token,
+    emailVerificationExpires: { $gt: new Date() },
+  }).select('+emailVerificationToken +emailVerificationExpires');
+
+  if (!user) {
+    throw new ApiError(400, 'Token xác thực email không hợp lệ hoặc đã hết hạn');
+  }
+
+  user.isEmailVerified = true;
+  user.emailVerificationToken = null;
+  user.emailVerificationExpires = null;
+  await user.save();
+
+  return success(res, { user: user.toSafeObject() }, 'Xác thực email thành công!');
+});
+
+/* ─── Resend Verification Email ─── */
+const resendVerification = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('+emailVerificationToken +emailVerificationExpires');
+
+  if (!user) {
+    throw new ApiError(404, 'Không tìm thấy người dùng');
+  }
+
+  if (user.isEmailVerified) {
+    throw new ApiError(400, 'Email đã được xác thực');
+  }
+
+  const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+  const emailVerificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+
+  user.emailVerificationToken = emailVerificationToken;
+  user.emailVerificationExpires = emailVerificationExpires;
+  await user.save();
+
+  sendVerificationEmail(user, emailVerificationToken).catch((err) => {
+    console.warn('[Email] Gửi lại email xác thực thất bại:', err.message);
+  });
+
+  return success(res, null, 'Đã gửi lại email xác thực. Vui lòng kiểm tra hộp thư.');
+});
+
 module.exports = {
   registerValidators,
   loginValidators,
   updateProfileValidators,
   updateUserRoleValidators,
   updateUserStatusValidators,
+  forgotPasswordValidators,
+  resetPasswordValidators,
+  verifyEmailValidators,
   register,
   login,
   me,
@@ -147,4 +267,8 @@ module.exports = {
   listUsers,
   updateUserRole,
   updateUserStatus,
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
+  resendVerification,
 };

@@ -16,7 +16,9 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   return (
     <DashboardShell title={title} subtitle={subtitle}>
-      {children}
+      <div className="space-y-6">
+        {children}
+      </div>
     </DashboardShell>
   );
 };

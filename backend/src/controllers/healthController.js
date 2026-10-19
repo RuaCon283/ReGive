@@ -26,7 +26,7 @@ function health(_req, res) {
       phase: 'final-release',
       sprint: 3,
       stack: 'Node.js + Express + MongoDB',
-      aiProvider: config.aiProvider || 'mock',
+      aiProvider: config.aiProvider || 'gemini',
       env: config.nodeEnv,
       modules: MODULES,
     },

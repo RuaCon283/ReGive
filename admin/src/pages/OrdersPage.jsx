@@ -45,7 +45,7 @@ export default function OrdersPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 2"
+        eyebrow="Vận hành"
         title="Đơn hàng"
         description="Chỉ chuyển trạng thái hợp lệ: paid → processing → shipped → completed. Huỷ khi pending/paid/processing."
       />
@@ -95,7 +95,13 @@ export default function OrdersPage() {
                 key: 'actions',
                 header: '',
                 render: (row) => (
-                  <Button variant="ghost" onClick={() => setCurrent(row)}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setCurrent(row);
+                      setNote(''); // reset note để không dính ghi chú của đơn trước
+                    }}
+                  >
                     Cập nhật
                   </Button>
                 ),

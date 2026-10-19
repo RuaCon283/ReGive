@@ -8,8 +8,8 @@ import { DEMO_ACCOUNTS, LABELS } from '../lib/constants';
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@regive.local');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
               không tự publish lên marketplace.
             </p>
           </div>
-          <p className="text-xs text-sand/40">Sprint 1–3 · Node.js API · React + Tailwind</p>
+          <p className="text-xs text-sand/40">ReGive · Node.js API · React + Tailwind</p>
         </div>
       </section>
 
@@ -97,8 +97,9 @@ export default function LoginPage() {
                   aria-label={`Dùng tài khoản demo ${LABELS.role[acc.role]}`}
                   className="min-h-11 rounded-full border border-forest/10 bg-white px-3 py-1.5 text-xs text-forest transition hover:border-moss/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss"
                   onClick={() => {
+                    // Chỉ điền email demo; mật khẩu người dùng phải tự nhập
                     setEmail(acc.email);
-                    setPassword(acc.password);
+                    setPassword('');
                   }}
                 >
                   {LABELS.role[acc.role]}

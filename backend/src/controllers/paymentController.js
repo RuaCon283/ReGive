@@ -157,7 +157,9 @@ const getById = asyncHandler(async (req, res) => {
 
   if (!payment) throw new ApiError(404, 'Không tìm thấy thanh toán');
 
-  const isOwner = payment.payer._id.toString() === req.user._id.toString();
+  const isOwner =
+    Boolean(payment.payer) &&
+    payment.payer._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
   if (!isOwner && !isStaff) throw new ApiError(403, 'Bạn không có quyền truy cập');
 

@@ -30,6 +30,19 @@ export type UpdateProfilePayload = {
   };
 };
 
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ResetPasswordPayload = {
+  token: string;
+  newPassword: string;
+};
+
+export type VerifyEmailPayload = {
+  token: string;
+};
+
 export const authService = {
   async register(payload: RegisterPayload): Promise<AuthResponseData> {
     const res = await apiClient.post<ApiResponse<AuthResponseData>>('/auth/register', payload);
@@ -49,5 +62,25 @@ export const authService = {
   async updateProfile(payload: UpdateProfilePayload): Promise<User> {
     const res = await apiClient.patch<ApiResponse<{ user: User }>>('/auth/me', payload);
     return res.data.data.user;
+  },
+
+  async forgotPassword(payload: ForgotPasswordPayload): Promise<string> {
+    const res = await apiClient.post<ApiResponse<null>>('/auth/forgot-password', payload);
+    return res.data.message || 'Đã gửi email đặt lại mật khẩu.';
+  },
+
+  async resetPassword(payload: ResetPasswordPayload): Promise<string> {
+    const res = await apiClient.post<ApiResponse<null>>('/auth/reset-password', payload);
+    return res.data.message || 'Đặt lại mật khẩu thành công.';
+  },
+
+  async verifyEmail(payload: VerifyEmailPayload): Promise<User> {
+    const res = await apiClient.post<ApiResponse<{ user: User }>>('/auth/verify-email', payload);
+    return res.data.data.user;
+  },
+
+  async resendVerification(): Promise<string> {
+    const res = await apiClient.post<ApiResponse<null>>('/auth/resend-verification');
+    return res.data.message || 'Đã gửi lại email xác thực.';
   },
 };

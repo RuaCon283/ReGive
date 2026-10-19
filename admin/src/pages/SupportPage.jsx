@@ -20,7 +20,7 @@ import { LABELS, SUPPORT_STATUSES } from '../lib/constants';
 import { displayName, formatDate, oid } from '../lib/format';
 import { useAsync } from '../lib/hooks';
 
-const URGENCY = { low: 'Thấp', medium: 'Trung bình', high: 'Cao' };
+const URGENCY = { low: 'Thầp', medium: 'Trung bình', high: 'Cao' };
 
 export default function SupportPage() {
   const toast = useToast();
@@ -54,7 +54,7 @@ export default function SupportPage() {
   return (
     <div>
       <PageHeader
-        eyebrow="Sprint 1"
+        eyebrow="Hỗ trợ"
         title="Yêu cầu hỗ trợ"
         description="Duyệt hồ sơ người thụ hưởng. Không lộ dữ liệu nhạy cảm ra ngoài phạm vi nhân sự."
       />

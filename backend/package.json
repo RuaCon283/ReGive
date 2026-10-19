@@ -8,15 +8,22 @@
     "dev": "nodemon src/server.js",
     "seed": "node src/scripts/seed.js",
     "demo:e2e": "node src/scripts/demo-e2e.js",
-    "test:regression": "node src/scripts/regression.js"
+    "test:regression": "node src/scripts/regression.js",
+    "test:email": "node src/scripts/test-email.js"
   },
-  "keywords": ["regive", "charity", "express", "mongodb"],
+  "keywords": [
+    "regive",
+    "charity",
+    "express",
+    "mongodb"
+  ],
   "license": "UNLICENSED",
   "engines": {
     "node": ">=18"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -25,7 +32,9 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^2.4.0",
+    "nodemailer": "^10.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

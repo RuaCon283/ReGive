@@ -138,7 +138,7 @@ function buildImpactMetrics(category, suggestedPrice, rawMetrics = {}) {
   };
 }
 
-function runMockAssessmentSync({ name, description, category, images, extraNote }) {
+function runHeuristicAssessmentSync({ name, description, category, images, extraNote }) {
   const text = [name, description, category, extraNote, ...(images || [])].join(' ');
   const detectedCategory = category && category !== 'other' ? normalizeCategory(category) : detectCategory(text);
   const condition = detectCondition(text);
@@ -150,7 +150,7 @@ function runMockAssessmentSync({ name, description, category, images, extraNote 
   const confidence = images && images.length > 0 ? 0.78 : 0.62;
 
   return {
-    provider: 'mock',
+    provider: 'heuristic',
     suggestion: {
       category: detectedCategory,
       condition,
@@ -163,14 +163,14 @@ function runMockAssessmentSync({ name, description, category, images, extraNote 
       impactMetrics: buildImpactMetrics(detectedCategory, suggestedPrice),
     },
     rawResponse: {
-      engine: 'regive-mock-ai-v1',
+      engine: 'regive-heuristic-v1',
       analyzedFields: { name, description, category, imageCount: (images || []).length },
     },
   };
 }
 
-async function runMockAssessment(input) {
-  return runMockAssessmentSync(input);
+async function runHeuristicAssessment(input) {
+  return runHeuristicAssessmentSync(input);
 }
 
 function stripCodeFence(text) {
@@ -193,7 +193,7 @@ function parseGeminiJson(text) {
 }
 
 function normalizeAiSuggestion(raw, input) {
-  const fallback = runMockAssessmentSync(input).suggestion;
+  const fallback = runHeuristicAssessmentSync(input).suggestion;
   const category = normalizeCategory(raw.category || fallback.category);
   const condition = normalizeCondition(raw.condition || fallback.condition);
   const quality = normalizeQuality(raw.quality || fallback.quality, condition);
@@ -403,7 +403,7 @@ async function assessProductInput(input) {
     try {
       return await runGeminiAssessment(input);
     } catch (err) {
-      const fallback = await runMockAssessment(input);
+      const fallback = await runHeuristicAssessment(input);
       return {
         ...fallback,
         provider: 'gemini-fallback',
@@ -417,7 +417,7 @@ async function assessProductInput(input) {
     }
   }
 
-  return runMockAssessment(input);
+  return runHeuristicAssessment(input);
 }
 
-module.exports = { assessProductInput, runMockAssessment, runGeminiAssessment };
+module.exports = { assessProductInput, runHeuristicAssessment, runGeminiAssessment };
