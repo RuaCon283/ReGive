@@ -6,7 +6,7 @@
 | 2 | AI | Provider mặc định là **Gemini**, fallback heuristic khi lỗi | Done | Hook `AI_PROVIDER=gemini` sẵn, cần `GEMINI_API_KEY` |
 | 3 | Upload ảnh | **Cloudinary** khi cấu hình đủ, **tự fallback lưu local** (`backend/uploads/`, serve qua `/uploads`) khi chưa có credentials | Done | `POST /api/uploads/single`, `POST /api/uploads/multiple`, `DELETE /api/uploads/delete` |
 | 4 | Cart | Mua ngay 1 sản phẩm / đơn, chưa có giỏ hàng nhiều SP | By design | Theo quyết định Sprint 2 |
-| 5 | Notification | In-app + **email** (SMTP) | Done | Cần cấu hình `SMTP_USER`, `SMTP_PASS` |
+| 5 | Notification | In-app + **email** (SMTP) | Done | `SMTP_USER`/`SMTP_PASS` đã cấu hình (Gmail app password); test OK 19/10/2026 — chạy `npm run test:email` để kiểm tra lại |
 | 6 | Mongo txn | Không dùng multi-doc transaction (tương thích Mongo standalone) | Limitation | Payment dùng claim idempotent |
 | 7 | Frontend | Đã có UI React (regive-user + admin) | Done | Phase FE hoàn tất |
 | 8 | Deploy | Chưa cấu hình hosting/CI production mặc định | Pending | Phase 6 buffer |

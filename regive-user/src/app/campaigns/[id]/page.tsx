@@ -258,48 +258,48 @@ export default function CampaignDetailPage() {
         <div className="space-y-8 pt-3">
           {/* Official Bank Account & QR Helper Box */}
           {campaign.bankAccount && (
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl space-y-5">
+            <div className="bg-gradient-to-br from-p-s50 to-sec-s50 border border-p-s200 text-n-s900 rounded-3xl p-6 sm:p-8 shadow-md space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div className="space-y-1">
-                  <span className="text-xs font-bold text-p-s400 uppercase tracking-wider flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-p-s600 uppercase tracking-wider flex items-center gap-1.5">
                     <Landmark className="w-4 h-4" />
                     Tài khoản tiếp nhận minh bạch chính thức
                   </span>
-                  <h4 className="text-lg font-black text-white">{campaign.bankAccount.bankName}</h4>
+                  <h4 className="text-lg font-black text-p-s900">{campaign.bankAccount.bankName}</h4>
                 </div>
                 <Tag color="cyan" className="font-bold text-xs px-3 py-1 rounded-full border-0 m-0">
                   Sao kê tự động 24/7
                 </Tag>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-700/80 text-sm">
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Số tài khoản thiện nguyện:</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-p-s200 text-sm">
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Số tài khoản thiện nguyện:</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-base font-mono font-black text-p-s300">
+                    <span className="text-base font-mono font-black text-p-s700">
                       {campaign.bankAccount.accountNumber || '9999REGIVE'}
                     </span>
                     <button
                       type="button"
                       onClick={() => handleCopyBankAccount(campaign.bankAccount?.accountNumber || '9999REGIVE', 'Số tài khoản')}
-                      className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                      className="text-n-s400 hover:text-p-s600 p-1 rounded-md transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Tên chủ tài khoản:</span>
-                  <span className="text-sm font-bold text-white block truncate">
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Tên chủ tài khoản:</span>
+                  <span className="text-sm font-bold text-n-s900 block truncate">
                     {campaign.bankAccount.accountHolder || 'QUY THIEN NGUYEN REGIVE'}
                   </span>
                 </div>
 
-                <div className="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700 space-y-1">
-                  <span className="text-xs text-slate-400 block">Cú pháp chuyển khoản:</span>
+                <div className="bg-white/90 p-3.5 rounded-2xl border border-p-s200 space-y-1">
+                  <span className="text-xs text-n-s500 block">Cú pháp chuyển khoản:</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-amber-300 truncate">
+                    <span className="text-xs font-mono font-bold text-amber-600 truncate">
                       REGIVE {campaign._id.slice(-6).toUpperCase()}
                     </span>
                     <button
@@ -307,7 +307,7 @@ export default function CampaignDetailPage() {
                       onClick={() =>
                         handleCopyBankAccount(`REGIVE ${campaign._id.slice(-6).toUpperCase()}`, 'Cú pháp chuyển khoản')
                       }
-                      className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+                      className="text-n-s400 hover:text-p-s600 p-1 rounded-md transition-colors"
                     >
                       <Copy className="w-4 h-4" />
                     </button>

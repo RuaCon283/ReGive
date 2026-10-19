@@ -261,7 +261,7 @@ export default function DonateProductPage() {
                       type="button"
                       onClick={handleAiAnalyze}
                       disabled={aiLoading}
-                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-sec-s600 hover:bg-sec-s700 text-white font-bold text-xs shadow-md shadow-sec-s600/20 disabled:opacity-50 transition-all shrink-0 cursor-pointer"
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-sec-s600 hover:bg-sec-s700 text-white font-bold text-xs shadow-md shadow-sec-s600/20 disabled:bg-n-s200 disabled:text-n-s500 disabled:shadow-none transition-all shrink-0 cursor-pointer disabled:cursor-not-allowed"
                     >
                       <Sparkles className={`w-3.5 h-3.5 ${aiLoading ? 'animate-spin' : ''}`} />
                       <span>{aiLoading ? 'AI đang phân tích...' : 'Thẩm định cùng AI'}</span>

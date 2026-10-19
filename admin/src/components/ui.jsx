@@ -27,7 +27,7 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={classNames(
-        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss motion-reduce:active:scale-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100',
+        'inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss motion-reduce:active:scale-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-100 disabled:bg-mist disabled:text-ink/45 disabled:border-transparent disabled:shadow-none disabled:active:scale-100',
         buttonStyles[variant],
         className
       )}

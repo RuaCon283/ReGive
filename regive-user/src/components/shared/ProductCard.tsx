@@ -73,7 +73,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow }) =
               <button className="w-full inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold py-2 px-3 rounded-full border border-n-s200 text-n-s700 hover:border-p-s400 hover:text-p-s600 transition-colors cursor-pointer bg-white">Chi tiết <ArrowRight className="w-3.5 h-3.5" /></button>
             </Link>
             <button onClick={() => onBuyNow ? onBuyNow(product) : (window.location.href = `/marketplace/${product._id}`)} disabled={!inStock}
-              className={`flex-1 inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold py-2 px-3 rounded-full transition-colors cursor-pointer ${inStock ? 'bg-p-s500 text-white hover:bg-p-s600 shadow-sm shadow-p-s500/20' : 'bg-n-s100 text-n-s400 cursor-not-allowed'}`}
+              className={`flex-1 inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-bold py-2 px-3 rounded-full transition-colors cursor-pointer ${inStock ? 'bg-p-s500 text-white hover:bg-p-s600 shadow-sm shadow-p-s500/20' : 'bg-n-s100 text-n-s500 cursor-not-allowed'}`}
             >
               <ShoppingBag className="w-3.5 h-3.5" />{inStock ? 'Mua ngay' : 'Hết hàng'}
             </button>

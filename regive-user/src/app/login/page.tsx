@@ -108,7 +108,7 @@ function LoginForm() {
       {/* Demo credentials hint */}
       <div className="bg-slate-50 p-3.5 rounded-xl border border-gray-100 text-xs text-gray-500 space-y-1">
         <p className="font-semibold text-gray-700">Tài khoản thử nghiệm hệ thống:</p>
-        <p>User: <code className="text-p-s700 font-mono">user1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
+        <p>User: <code className="text-p-s700 font-mono">user@regive.local</code> / <code className="text-gray-700 font-mono">User@123</code></p>
         <p>Beneficiary: <code className="text-p-s700 font-mono">beneficiary1@example.com</code> / <code className="text-gray-700 font-mono">password123</code></p>
       </div>
 
