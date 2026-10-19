@@ -117,7 +117,9 @@ const getById = asyncHandler(async (req, res) => {
     throw new ApiError(404, 'Không tìm thấy quyên góp');
   }
 
-  const isOwner = donation.donor._id.toString() === req.user._id.toString();
+  const isOwner =
+    Boolean(donation.donor) &&
+    donation.donor._id.toString() === req.user._id.toString();
   const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
   if (!isOwner && !isStaff) {
     throw new ApiError(403, 'Bạn không có quyền truy cập');

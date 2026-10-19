@@ -95,7 +95,13 @@ export default function OrdersPage() {
                 key: 'actions',
                 header: '',
                 render: (row) => (
-                  <Button variant="ghost" onClick={() => setCurrent(row)}>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      setCurrent(row);
+                      setNote(''); // reset note để không dính ghi chú của đơn trước
+                    }}
+                  >
                     Cập nhật
                   </Button>
                 ),

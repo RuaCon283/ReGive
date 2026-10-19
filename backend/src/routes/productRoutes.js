@@ -37,7 +37,7 @@ router.patch(
   '/:id',
   authenticate,
   authorize(ROLES.ADMIN, ROLES.EMPLOYEE),
-  ctrl.idParam,
+  ctrl.updateValidators,
   validate,
   ctrl.updateProduct
 );

@@ -66,6 +66,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ loading: true });
     try {
       const { user, token } = await authService.register(payload);
+      ensureUserAppRole(user);
       tokenStorage.set(token);
       set({ user, token, loading: false, initialized: true });
       return user;

@@ -50,7 +50,8 @@ export default function CampaignsPage() {
     try {
       setLoading(true);
       setError(null);
-      const data = await campaignService.listPublic();
+      // Luôn chỉ lấy chiến dịch đang hoạt động cho trang công khai
+      const data = await campaignService.listPublic({ status: 'active' });
       setCampaigns(data);
     } catch (err: any) {
       setError(err.message || 'Không thể tải danh sách chiến dịch');
@@ -103,7 +104,11 @@ export default function CampaignsPage() {
           return pB - pA;
         }
         if (sortBy === 'urgent') {
-          // nearest end date
+          // Ưu tiên theo mức khẩn cấp thật (emergency > urgent > normal), tie-break bằng ngày kết thúc gần nhất
+          const urgencyRank: Record<string, number> = { emergency: 0, urgent: 1, normal: 2 };
+          const uA = urgencyRank[a.urgency ?? 'normal'] ?? 2;
+          const uB = urgencyRank[b.urgency ?? 'normal'] ?? 2;
+          if (uA !== uB) return uA - uB;
           return new Date(a.endDate).getTime() - new Date(b.endDate).getTime();
         }
         if (sortBy === 'targetAsc') {

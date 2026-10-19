@@ -64,7 +64,7 @@ export const LABELS = {
   quality: {
     high: 'Cao',
     medium: 'Trung bình',
-    low: 'Thấp',
+    low: 'Thầp',
   },
   order: {
     pending: 'Chờ thanh toán',
@@ -145,6 +145,6 @@ export const ORDER_NEXT = {
 };
 
 export const DEMO_ACCOUNTS = [
-  { role: 'ADMIN', email: 'admin@regive.local', password: 'Admin@123' },
-  { role: 'EMPLOYEE', email: 'employee@regive.local', password: 'Employee@123' },
+  { role: 'ADMIN', email: 'admin@regive.local' },
+  { role: 'EMPLOYEE', email: 'employee@regive.local' },
 ];

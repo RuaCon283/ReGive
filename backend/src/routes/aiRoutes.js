@@ -2,13 +2,14 @@ const express = require('express');
 const { param } = require('express-validator');
 const { validate } = require('../middleware/validate');
 const { authenticate, authorize } = require('../middleware/auth');
+const { aiLimiter } = require('../middleware/rateLimit');
 const { ROLES } = require('../constants/enums');
 const ctrl = require('../controllers/aiController');
 
 const router = express.Router();
 
-// Public / User AI donation preview endpoint
-router.post('/preview-donation', ctrl.previewDonation);
+// Public / User AI donation preview endpoint (rate-limited: gọi tốn phí AI)
+router.post('/preview-donation', aiLimiter, ctrl.previewDonation);
 
 router.use(authenticate, authorize(ROLES.ADMIN, ROLES.EMPLOYEE));
 

@@ -143,14 +143,16 @@ export default function TransparencyPage() {
       key: 'amount',
       align: 'right' as const,
       width: 160,
-      render: (val: number, record: TransparencyTransaction) => (
+      render: (val: number | null, record: TransparencyTransaction) => (
         <div className="text-right">
           <span
             className={`font-black text-sm sm:text-base font-mono ${
               record.direction === 'INFLOW' ? 'text-p-s700' : 'text-rose-600'
             }`}
           >
-            {record.direction === 'INFLOW' ? '+' : '-'} {formatVND(val)}
+            {val == null
+              ? 'Đang cập nhật'
+              : `${record.direction === 'INFLOW' ? '+' : '-'} ${formatVND(val)}`}
           </span>
           <span className="block text-[10px] text-gray-400 mt-0.5">
             {record.proofType}

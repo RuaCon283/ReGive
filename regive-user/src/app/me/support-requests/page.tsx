@@ -51,7 +51,7 @@ export default function MySupportRequestsPage() {
   const getUrgencyTag = (urgency: string) => {
     if (urgency === 'high') return <Tag color="error">Cấp thiết cao</Tag>;
     if (urgency === 'medium') return <Tag color="warning">Trung bình</Tag>;
-    return <Tag color="default">Thấp</Tag>;
+    return <Tag color="default">Thầp</Tag>;
   };
 
   return (

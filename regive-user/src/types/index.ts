@@ -576,7 +576,7 @@ export type TransparencyTransaction = {
   direction: 'INFLOW' | 'OUTFLOW';
   category: 'DONATION_MONEY' | 'DONATION_PRODUCT' | 'MARKETPLACE_REVENUE' | 'BENEFICIARY_DISBURSEMENT';
   title: string;
-  amount: number;
+  amount: number | null;
   partner: string;
   campaignTitle: string;
   campaignId?: string;

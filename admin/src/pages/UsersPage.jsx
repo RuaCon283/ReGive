@@ -15,7 +15,7 @@ export default function UsersPage() {
   const { data, loading, error, reload } = useAsync(() => authApi.users({ role }), [role]);
   const users = data?.data?.users || [];
 
-  const isSelf = (row) => oid(row) === currentUser?.id;
+  const isSelf = (row) => Boolean(currentUser) && oid(row) === oid(currentUser);
 
   async function handleRoleChange(row, newRole) {
     if (newRole === row.role) return;

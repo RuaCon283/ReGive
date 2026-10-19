@@ -33,6 +33,34 @@ const assessValidators = [
   body('description').optional().isString(),
 ];
 
+const updateValidators = [
+  param('id').isMongoId(),
+  body('sku').optional().isString(),
+  body('name').optional().trim().isString().notEmpty(),
+  body('brand').optional().isString(),
+  body('origin').optional().isString(),
+  body('description').optional().isString(),
+  body('category').optional().isString(),
+  body('images').optional().isArray(),
+  body('originalPrice').optional().isFloat({ min: 0 }),
+  body('price').optional().isFloat({ min: 0 }),
+  body('suggestedPrice').optional().isFloat({ min: 0 }),
+  body('weight').optional().isFloat({ min: 0 }),
+  body('dimensions').optional().isObject(),
+  body('material').optional().isString(),
+  body('color').optional().isString(),
+  body('tags').optional().isArray(),
+  body('highlights').optional().isArray(),
+  body('specifications').optional().isObject(),
+  body('inspectionReport').optional().isObject(),
+  body('donationStory').optional().isObject(),
+  body('charityImpact').optional().isObject(),
+  body('warehouseAndShipping').optional().isObject(),
+  body('guaranteePolicy').optional().isObject(),
+  body('storageLocation').optional().isString(),
+  body('assessmentNote').optional().isString(),
+];
+
 const idParam = [param('id').isMongoId()];
 
 const intakeFromDonation = asyncHandler(async (req, res) => {
@@ -256,6 +284,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 module.exports = {
   intakeValidators,
   assessValidators,
+  updateValidators,
   idParam,
   intakeFromDonation,
   assess,

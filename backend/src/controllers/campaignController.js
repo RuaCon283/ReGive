@@ -85,7 +85,7 @@ const listPublic = asyncHandler(async (req, res) => {
       {
         $match: {
           campaign: { $in: campaignIds },
-          status: { $in: ['completed', 'approved', 'received', 'confirmed', 'processing'] },
+          status: { $in: ['completed', 'confirmed', 'processing'] },
         },
       },
       { $group: { _id: '$campaign', count: { $sum: 1 } } },

@@ -862,36 +862,52 @@ export default function CampaignDetailPage() {
               </div>
             </div>
 
-            {/* Quick Action CTA Buttons */}
+            {/* Quick Action CTA Buttons — chỉ mở ủng hộ khi chiến dịch đang hoạt động */}
             <div className="space-y-3 pt-1">
-              <Button
-                type="primary"
-                size="large"
-                icon={<Heart className="w-4 h-4 fill-white" />}
-                onClick={() => setDonateModalOpen(true)}
-                className="w-full h-14 rounded-2xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-xl shadow-p-s600/25 transition-all"
-              >
-                Ủng hộ tiền trực tuyến
-              </Button>
+              {campaign.status === 'active' ? (
+                <>
+                  <Button
+                    type="primary"
+                    size="large"
+                    icon={<Heart className="w-4 h-4 fill-white" />}
+                    onClick={() => setDonateModalOpen(true)}
+                    className="w-full h-14 rounded-2xl bg-p-s600 hover:bg-p-s700 text-white font-bold text-base shadow-xl shadow-p-s600/25 transition-all"
+                  >
+                    Ủng hộ tiền trực tuyến
+                  </Button>
 
-              <Link href={`/campaigns/${campaign._id}/donate-product`} className="block">
-                <Button
-                  size="large"
-                  icon={<Package className="w-4 h-4 text-sec-s600" />}
-                  className="w-full h-12 rounded-xl border border-sec-s200 hover:border-sec-s500 text-sec-s800 font-bold text-sm bg-sec-s50/50 hover:bg-sec-s50 transition-all"
-                >
-                  Ủng hộ hiện vật (Đồ cũ/Mới)
-                </Button>
-              </Link>
+                  <Link href={`/campaigns/${campaign._id}/donate-product`} className="block">
+                    <Button
+                      size="large"
+                      icon={<Package className="w-4 h-4 text-sec-s600" />}
+                      className="w-full h-12 rounded-xl border border-sec-s200 hover:border-sec-s500 text-sec-s800 font-bold text-sm bg-sec-s50/50 hover:bg-sec-s50 transition-all"
+                    >
+                      Ủng hộ hiện vật (Đồ cũ/Mới)
+                    </Button>
+                  </Link>
 
-              <Button
-                size="large"
-                icon={<HandHeart className="w-4 h-4 text-sky-600" />}
-                onClick={() => setVolunteerModalOpen(true)}
-                className="w-full h-12 rounded-xl border border-sky-200 hover:border-sky-500 text-sky-800 font-bold text-sm bg-sky-50/50 hover:bg-sky-50 transition-all"
-              >
-                Đăng ký Tình nguyện viên
-              </Button>
+                  <Button
+                    size="large"
+                    icon={<HandHeart className="w-4 h-4 text-sky-600" />}
+                    onClick={() => setVolunteerModalOpen(true)}
+                    className="w-full h-12 rounded-xl border border-sky-200 hover:border-sky-500 text-sky-800 font-bold text-sm bg-sky-50/50 hover:bg-sky-50 transition-all"
+                  >
+                    Đăng ký Tình nguyện viên
+                  </Button>
+                </>
+              ) : (
+                <Alert
+                  type={campaign.status === 'cancelled' ? 'error' : 'info'}
+                  showIcon
+                  message={
+                    campaign.status === 'closed'
+                      ? 'Chiến dịch đã kết thúc — cảm ơn bạn đã đồng hành cùng ReGive.'
+                      : campaign.status === 'cancelled'
+                        ? 'Chiến dịch đã bị huỷ và không nhận ủng hộ mới.'
+                        : 'Chiến dịch đang ở trạng thái nháp, chưa mở nhận ủng hộ.'
+                  }
+                />
+              )}
             </div>
 
             {/* Micro reassurance badges */}

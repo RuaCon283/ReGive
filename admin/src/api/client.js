@@ -40,6 +40,13 @@ export async function api(path, { method = 'GET', body, query, isFormData = fals
 
     const json = await res.json().catch(() => ({}));
     if (!res.ok || json.success === false) {
+      // Token hết hạn hoặc không hợp lệ: xoá token và về trang đăng nhập
+      if (res.status === 401) {
+        setToken(null);
+        if (window.location.pathname !== '/login') {
+          window.location.replace('/login');
+        }
+      }
       const err = new Error(json.message || `Request failed (${res.status})`);
       err.status = res.status;
       err.errors = json.errors;
