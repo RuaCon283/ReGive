@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button, Alert, Tag, Modal, message } from 'antd';
-import { LifeBuoy, RefreshCw, CheckCircle, AlertTriangle, MessageSquare } from 'lucide-react';
+import { Button, Alert, Tag, message } from 'antd';
+import { RefreshCw, CheckCircle, MessageSquare, Eye } from 'lucide-react';
 import { supportService } from '@/services/supportService';
 import { SupportRequest } from '@/types';
 import { formatDate } from '@/lib/format';
@@ -105,9 +105,20 @@ export default function MySupportRequestsPage() {
                       <h4 className="font-bold text-gray-900 text-base">{r.title}</h4>
                     </div>
 
-                    <span className="text-xs text-gray-400 self-start sm:self-center">
-                      Ngày gửi: {formatDate(r.createdAt)}
-                    </span>
+                    <div className="flex items-center gap-3 self-start sm:self-center">
+                      <span className="text-xs text-gray-400">
+                        Ngày gửi: {formatDate(r.createdAt)}
+                      </span>
+                      <Link href={`/me/support-requests/${r._id}`}>
+                        <Button
+                          size="small"
+                          icon={<Eye className="w-3.5 h-3.5" />}
+                          className="rounded-lg text-xs"
+                        >
+                          Xem chi tiết
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
 
                   <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-line bg-slate-50 p-3.5 rounded-xl border border-slate-100">

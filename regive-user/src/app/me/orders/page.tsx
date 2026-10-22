@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button, Alert, Tag, Modal, Steps, Input, message, Popconfirm } from 'antd';
-import { Package, RefreshCw, Eye, CreditCard, Truck, MapPin, XCircle, CheckCircle2, Clock } from 'lucide-react';
+import { Button, Alert, Modal, Input, message } from 'antd';
+import { Package, RefreshCw, Eye, CreditCard, MapPin, XCircle } from 'lucide-react';
 import { orderService } from '@/services/orderService';
 import { paymentService } from '@/services/paymentService';
 import { Order } from '@/types';
@@ -13,25 +13,10 @@ import { StatusBadge } from '@/components/shared/StatusBadge';
 import { TableSkeleton } from '@/components/shared/LoadingSkeleton';
 import { EmptyState } from '@/components/shared/EmptyState';
 
-const ORDER_STEPS = [
-  { key: 'pending', title: 'Chờ thanh toán' },
-  { key: 'paid', title: 'Đã thanh toán' },
-  { key: 'processing', title: 'Đang chuẩn bị' },
-  { key: 'shipped', title: 'Đang giao hàng' },
-  { key: 'completed', title: 'Hoàn thành' },
-];
-
-function getStepIndex(status: string): number {
-  if (status === 'cancelled') return -1;
-  const idx = ORDER_STEPS.findIndex((s) => s.key === status);
-  return idx >= 0 ? idx : 0;
-}
-
 export default function MyOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [payingId, setPayingId] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
@@ -183,98 +168,21 @@ export default function MyOrdersPage() {
                       </>
                     )}
 
-                    <Button
-                      size="small"
-                      icon={<Eye className="w-3.5 h-3.5" />}
-                      onClick={() => setSelectedOrder(o)}
-                      className="rounded-lg text-xs"
-                    >
-                      Chi tiết & Tiến độ
-                    </Button>
+                    <Link href={`/me/orders/${o._id}`}>
+                      <Button
+                        size="small"
+                        icon={<Eye className="w-3.5 h-3.5" />}
+                        className="rounded-lg text-xs"
+                      >
+                        Chi tiết & Tiến độ
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-
-        {/* Order detail modal with Steps Timeline */}
-        <Modal
-          title={<span className="font-bold text-base text-gray-900">Chi Tiết Đơn Hàng</span>}
-          open={!!selectedOrder}
-          onCancel={() => setSelectedOrder(null)}
-          footer={null}
-          width={600}
-          className="rounded-2xl"
-        >
-          {selectedOrder && (
-            <div className="py-2 space-y-5 text-xs text-gray-600">
-              {/* Status Timeline */}
-              {selectedOrder.status !== 'cancelled' ? (
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider block mb-3">
-                    Tiến độ thực hiện
-                  </span>
-                  <Steps
-                    size="small"
-                    current={getStepIndex(selectedOrder.status)}
-                    items={ORDER_STEPS.map((s) => ({ title: s.title }))}
-                  />
-                </div>
-              ) : (
-                <Alert
-                  type="warning"
-                  message="Đơn hàng đã hủy"
-                  description="Đơn hàng này đã bị hủy theo yêu cầu của bạn hoặc đã quá hạn thanh toán."
-                  showIcon
-                  className="rounded-xl"
-                />
-              )}
-
-              <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                <span>Mã đơn hàng:</span>
-                <span className="font-mono font-bold text-gray-900">{selectedOrder.orderCode}</span>
-              </div>
-
-              <div className="flex justify-between items-center">
-                <span>Trạng thái:</span>
-                <StatusBadge type="order" status={selectedOrder.status} />
-              </div>
-
-              <div className="space-y-2 bg-p-s50/50 p-3.5 rounded-2xl border border-p-s100">
-                <span className="font-bold text-p-s950 block mb-1">Vật phẩm trong đơn:</span>
-                {selectedOrder.items.map((it, idx) => (
-                  <div key={idx} className="flex justify-between">
-                    <span>{it.name} (×{it.quantity})</span>
-                    <span className="font-bold text-p-s900">{formatVND(it.price * itemQuantity(it))}</span>
-                  </div>
-                ))}
-                <div className="pt-2 border-t border-p-s200 flex justify-between font-black text-p-s700 text-sm">
-                  <span>Tổng tiền thanh toán:</span>
-                  <span>{formatVND(selectedOrder.totalAmount)}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
-                <p><strong>Số điện thoại:</strong> {selectedOrder.phone || 'Chưa cung cấp'}</p>
-                <p><strong>Địa chỉ nhận hàng:</strong> {selectedOrder.shippingAddress || 'Chưa cung cấp'}</p>
-                {selectedOrder.note && <p><strong>Ghi chú:</strong> {selectedOrder.note}</p>}
-              </div>
-
-              {selectedOrder.statusHistory && selectedOrder.statusHistory.length > 0 && (
-                <div className="pt-2 border-t border-gray-100 space-y-1.5">
-                  <span className="font-bold text-gray-800 block">Lịch sử nhật ký:</span>
-                  {selectedOrder.statusHistory.map((h, i) => (
-                    <div key={i} className="flex justify-between text-gray-400">
-                      <span>{h.status} {h.note ? `— ${h.note}` : ''}</span>
-                      <span>{formatDate(h.at)}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </Modal>
 
         {/* Cancel Order Modal */}
         <Modal
@@ -313,8 +221,4 @@ export default function MyOrdersPage() {
       </div>
     </DashboardLayout>
   );
-}
-
-function itemQuantity(it: any): number {
-  return it.quantity || 1;
 }
