@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { Ban, Rocket, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+﻿import { useState } from 'react';
+import { Ban, Plus, Rocket, Trash2 } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { productApi } from '../api/client';
 import {
   Badge,
+  Button,
   Card,
   ConfirmDialog,
   DataState,
@@ -19,6 +20,7 @@ import { useAsync } from '../lib/hooks';
 
 export default function ProductsPage() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [status, setStatus] = useState('');
   const { data, loading, error, reload } = useAsync(() => productApi.list({ status }), [status]);
   const products = data?.data?.products || [];
@@ -61,6 +63,12 @@ export default function ProductsPage() {
         eyebrow="Sản phẩm"
         title="Sản phẩm"
         description="Intake → đánh giá (thủ công hoặc AI) → nhập kho → publish. AI không tự đăng bán."
+        actions={
+          <Button onClick={() => navigate('/products/new')}>
+            <Plus size={18} />
+            Thêm sản phẩm
+          </Button>
+        }
       />
       <div className="mb-4 max-w-xs">
         <FilterSelect
@@ -77,7 +85,7 @@ export default function ProductsPage() {
         onRetry={reload}
         skeleton={<TableSkeleton rows={6} columns={8} />}
         emptyTitle="Chưa có sản phẩm"
-        emptyDescription="Sản phẩm được tạo từ quyên góp đã tiếp nhận."
+        emptyDescription="Sản phẩm được tạo từ quyên góp đã tiếp nhận hoặc thêm thủ công."
       >
         <Card>
           <Table

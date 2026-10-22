@@ -13,6 +13,7 @@ import LoginPage from './pages/LoginPage';
 import NotificationsPage from './pages/NotificationsPage';
 import OrdersPage from './pages/OrdersPage';
 import PaymentsPage from './pages/PaymentsPage';
+import ProductCreatePage from './pages/ProductCreatePage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import ProductsPage from './pages/ProductsPage';
 import ProfilePage from './pages/ProfilePage';
@@ -57,6 +58,7 @@ export default function App() {
               <Route path="volunteers" element={<VolunteersPage />} />
               <Route path="support" element={<SupportPage />} />
               <Route path="products" element={<ProductsPage />} />
+              <Route path="products/new" element={<ProductCreatePage />} />
               <Route path="products/:id" element={<ProductDetailPage />} />
               <Route path="inventory" element={<InventoryPage />} />
               <Route path="orders" element={<OrdersPage />} />

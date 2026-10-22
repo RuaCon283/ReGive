@@ -37,11 +37,11 @@ Next.js rewrite `/api` → `http://localhost:5000`. Vite proxy `/api` → backen
 
 ## Tài khoản demo
 
-| Role | Email | Password |
-|---|---|---|
-| ADMIN | admin@regive.local | Admin@123 |
-| EMPLOYEE | employee@regive.local | Employee@123 |
-| USER | user@regive.local | User@123 |
+| Role        | Email                    | Password        |
+| ----------- | ------------------------ | --------------- |
+| ADMIN       | admin@regive.local       | Admin@123       |
+| EMPLOYEE    | employee@regive.local    | Employee@123    |
+| USER        | user@regive.local        | User@123        |
 | BENEFICIARY | beneficiary@regive.local | Beneficiary@123 |
 
 USER / BENEFICIARY dùng `regive-user/` (`http://localhost:3000`). ADMIN / EMPLOYEE dùng `admin/` (`http://localhost:5173`).
