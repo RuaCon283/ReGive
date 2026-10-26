@@ -7,6 +7,7 @@ Roles: `USER` · `BENEFICIARY` · `EMPLOYEE` · `ADMIN`
 | Register / Login | ✅ | ✅ | seed | seed |
 | View active campaigns | ✅ | ✅ | ✅ | ✅ |
 | Manage campaigns CRUD | — | — | — | ✅ |
+| Create campaign (draft) | ✅* | — | — | ✅ |
 | Donate money/product | ✅ | — | — | ✅* |
 | Process donations | — | — | ✅ | ✅ |
 | Volunteer register | ✅ | — | — | ✅* |
@@ -25,6 +26,8 @@ Roles: `USER` · `BENEFICIARY` · `EMPLOYEE` · `ADMIN`
 | List all users | — | — | — | ✅ |
 
 \* Admin có thể gọi một số API User-facing khi cần demo/ops; nghiệp vụ chính dành cho USER/BENEFICIARY.
+
+\*\* USER có thể tạo chiến dịch nhưng ở trạng thái `draft` (chưa active). Chỉ ADMIN/EMPLOYEE mới có thể tạo chiến dịch `active` hoặc cập nhật trạng thái chiến dịch.
 
 ## AI rule
 
