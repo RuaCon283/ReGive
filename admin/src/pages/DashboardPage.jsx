@@ -32,7 +32,7 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Báo cáo"
         title="Tổng quan vận hành"
-        description="Doanh thu marketplace, quyên góp tiền, tồn kho thầp và hoạt động gần đây."
+        description="Doanh thu marketplace, quyên góp tiền, tồn kho thấp và hoạt động gần đây."
       />
 
       {loading ? <DashboardSkeleton /> : null}
@@ -54,7 +54,7 @@ function DashboardContent({ overview }) {
         <StatCard label="Doanh thu bán hàng" value={formatVnd(summary.orderRevenue)} hint="Thanh toán đơn thành công" />
         <StatCard label="Quyên góp tiền" value={formatVnd(summary.donationRevenue)} hint={`${summary.moneyDonationsCompleted} khoản hoàn tất`} />
         <StatCard label="Đơn chờ xử lý" value={summary.ordersPending} hint={`${summary.ordersPaid} đơn đã thanh toán/xử lý`} />
-        <StatCard label="Tồn kho thầp" value={summary.lowStock} hint={`${summary.listedProducts}/${summary.totalProducts} SP đang bán`} />
+        <StatCard label="Tồn kho thấp" value={summary.lowStock} hint={`${summary.listedProducts}/${summary.totalProducts} SP đang bán`} />
       </div>
 
       <div className="mt-6 space-y-4">

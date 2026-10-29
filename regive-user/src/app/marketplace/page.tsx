@@ -163,8 +163,8 @@ export default function MarketplacePage() {
           <Select value={sortBy} onChange={setSortBy} size="large" className="min-w-[160px]"
             options={[
               { label: 'Mới nhất', value: 'newest' },
-              { label: 'Giá thầp → cao', value: 'priceAsc' },
-              { label: 'Giá cao → thầp', value: 'priceDesc' },
+              { label: 'Giá thấp → cao', value: 'priceAsc' },
+              { label: 'Giá cao → thấp', value: 'priceDesc' },
             ]}
           />
           <Button icon={<RefreshCw className="w-4 h-4" />} onClick={fetchProducts} size="large" className="rounded-xl" title="Làm mới" />

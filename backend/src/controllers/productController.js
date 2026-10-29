@@ -23,6 +23,23 @@ const intakeValidators = [
   body('images').optional().isArray(),
 ];
 
+const createValidators = [
+  body('name').trim().notEmpty().withMessage('Tên sản phẩm là bắt buộc'),
+  body('description').optional().isString(),
+  body('category').optional().isString(),
+  body('brand').optional().isString(),
+  body('price').optional().isFloat({ min: 0 }),
+  body('originalPrice').optional().isFloat({ min: 0 }),
+  body('stockQuantity').optional().isInt({ min: 0 }),
+  body('condition').optional().isIn(Object.values(PRODUCT_CONDITION)),
+  body('quality').optional().isIn(Object.values(PRODUCT_QUALITY)),
+  body('images').optional().isArray(),
+  body('storageLocation').optional().isString(),
+  body('weight').optional().isString(),
+  body('color').optional().isString(),
+  body('material').optional().isString(),
+];
+
 const assessValidators = [
   param('id').isMongoId(),
   body('category').optional().trim().notEmpty(),
@@ -102,6 +119,47 @@ const intakeFromDonation = asyncHandler(async (req, res) => {
   }
 
   return success(res, { product }, 'Tiếp nhận sản phẩm thành công', 201);
+});
+
+const createProduct = asyncHandler(async (req, res) => {
+  const {
+    name,
+    description,
+    category,
+    brand,
+    price,
+    originalPrice,
+    stockQuantity,
+    condition,
+    quality,
+    images,
+    storageLocation,
+    weight,
+    color,
+    material,
+  } = req.body;
+
+  const product = await Product.create({
+    name,
+    description: description || '',
+    category: category || 'other',
+    brand: brand || '',
+    price: price || 0,
+    originalPrice: originalPrice || 0,
+    stockQuantity: stockQuantity || 0,
+    condition: condition || null,
+    quality: quality || null,
+    images: images || [],
+    storageLocation: storageLocation || '',
+    weight: weight || '',
+    color: color || '',
+    material: material || '',
+    donation: null,
+    createdBy: req.user._id,
+    status: PRODUCT_STATUS.DRAFT,
+  });
+
+  return success(res, { product }, 'Tạo sản phẩm thành công', 201);
 });
 
 const assess = asyncHandler(async (req, res) => {
@@ -310,10 +368,12 @@ const removeProduct = asyncHandler(async (req, res) => {
 
 module.exports = {
   intakeValidators,
+  createValidators,
   assessValidators,
   updateValidators,
   idParam,
   intakeFromDonation,
+  createProduct,
   assess,
   listManage,
   getById,

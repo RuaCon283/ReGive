@@ -391,7 +391,11 @@ export default function UserDashboardPage() {
                           : 'Chiến dịch thiện nguyện'}
                       </p>
                       <p className="text-gray-500 mt-0.5">
-                        Lịch: {v.schedule?.timeSlot || 'Cả ngày'} • {formatDate(v.createdAt)}
+                        {v.schedule?.date ? (
+                          <>📅 {formatDate(v.schedule.date)} {v.schedule.timeSlot ? `• ${v.schedule.timeSlot}` : '• Cả ngày'}{v.schedule.location ? ` • 📍 ${v.schedule.location}` : ''}</>
+                        ) : (
+                          <>Lịch: {v.schedule?.timeSlot || 'Cả ngày'} • {formatDate(v.createdAt)}</>
+                        )}
                       </p>
                     </div>
                     <StatusBadge type="volunteer" status={v.status} />

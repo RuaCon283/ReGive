@@ -16,10 +16,12 @@ Yêu cầu: `npm run seed` + `npm start`
 ## 3. Marketplace — Sprint 2 (3 phút)
 1. `GET /api/products/marketplace` — Balo đã list
 2. User tạo `POST /api/orders`
-3. `POST /api/payments` → lấy `sandboxToken`
-4. `POST /api/payments/sandbox/confirm`
-5. `GET /api/orders/me` → status `paid`
-6. `GET /api/reports/overview` (employee)
+3. `POST /api/payments` với `{ purpose: "order", orderId: "..." }` → trả `checkoutUrl` (VNPay sandbox)
+4. Chuyển người dùng đến `checkoutUrl` để thanh toán VNPay
+5. Sau thanh toán, VNPay redirect về `GET /api/payments/vnpay/return` → tự động xác nhận
+6. (Hoặc dùng sandbox nội bộ: lấy `sandboxToken` từ payment detail → `POST /api/payments/sandbox/confirm`)
+7. `GET /api/orders/me` → status `paid`
+8. `GET /api/reports/overview` (employee)
 
 ## 4. AI human-in-the-loop — Sprint 3 (3 phút)
 1. Employee: lấy product draft **Áo khoác denim** (`GET /api/products?status=draft`)
@@ -35,5 +37,6 @@ npm run test:regression
 ```
 
 ## Closing
-- Known issues: payment sandbox, AI mock, chưa FE
+- Known issues: AI mock (heuristic + Gemini fallback), chưa FE staff review trên regive-user
+- Payment: VNPay sandbox (checkoutUrl) + sandbox nội bộ fallback
 - Backend đủ demo end-to-end cho mentor

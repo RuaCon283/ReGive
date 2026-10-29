@@ -219,6 +219,9 @@ export type VolunteerRegistration = {
     status?: string;
     startDate?: string;
     endDate?: string;
+    description?: string;
+    bannerImage?: string;
+    organization?: string;
   } | string;
   skills?: string;
   availabilityNote?: string;

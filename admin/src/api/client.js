@@ -108,6 +108,7 @@ export const supportApi = {
 export const productApi = {
   list: (query) => api('/api/products', { query }),
   get: (id) => api(`/api/products/${id}`),
+  create: (body) => api('/api/products', { method: 'POST', body }),
   update: (id, body) => api(`/api/products/${id}`, { method: 'PATCH', body }),
   remove: (id) => api(`/api/products/${id}`, { method: 'DELETE' }),
   intake: (body) => api('/api/products/intake', { method: 'POST', body }),

@@ -19,6 +19,14 @@ router.post(
   validate,
   ctrl.intakeFromDonation
 );
+router.post(
+  '/',
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.EMPLOYEE),
+  ctrl.createValidators,
+  validate,
+  ctrl.createProduct
+);
 router.get(
   '/',
   authenticate,

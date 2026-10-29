@@ -70,6 +70,32 @@ const myRegistrations = asyncHandler(async (req, res) => {
   return success(res, { registrations });
 });
 
+const idParam = [param('id').isMongoId()];
+
+const getById = asyncHandler(async (req, res) => {
+  const registration = await VolunteerRegistration.findById(req.params.id)
+    .populate('user', 'fullName email phone')
+    .populate(
+      'campaign',
+      'title description location startDate endDate status bannerImage organization'
+    )
+    .populate('reviewedBy', 'fullName email');
+
+  if (!registration) {
+    throw new ApiError(404, 'Không tìm thấy đăng ký tình nguyện');
+  }
+
+  const isOwner =
+    Boolean(registration.user) &&
+    registration.user._id.toString() === req.user._id.toString();
+  const isStaff = [ROLES.ADMIN, ROLES.EMPLOYEE].includes(req.user.role);
+  if (!isOwner && !isStaff) {
+    throw new ApiError(403, 'Bạn không có quyền truy cập');
+  }
+
+  return success(res, { registration });
+});
+
 const listAll = asyncHandler(async (req, res) => {
   const filter = {};
   if (req.query.status) filter.status = req.query.status;
@@ -117,8 +143,10 @@ const review = asyncHandler(async (req, res) => {
 module.exports = {
   registerValidators,
   reviewValidators,
+  idParam,
   register,
   myRegistrations,
+  getById,
   listAll,
   review,
 };

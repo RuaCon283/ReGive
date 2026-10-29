@@ -254,7 +254,7 @@ erDiagram
 | amount | Number | required, min 0 |
 | currency | String | default `VND` |
 | status | String | enum `pending` \| `success` \| `failed` \| `cancelled` · default `pending` |
-| provider | String | default `sandbox` |
+| provider | String | default `vnpay` |
 | payer | ObjectId → User | required |
 | order | ObjectId → Order | nullable — dùng khi `purpose = order` |
 | donation | ObjectId → Donation | nullable — dùng khi `purpose = donation` |

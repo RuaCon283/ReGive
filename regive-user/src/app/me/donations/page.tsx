@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Select, Button, Alert, Tag, Modal } from 'antd';
-import { Gift, RefreshCw, Eye, CreditCard } from 'lucide-react';
+import { Select, Button, Alert, Tag } from 'antd';
+import { RefreshCw, Eye, CreditCard } from 'lucide-react';
 import { donationService } from '@/services/donationService';
 import { paymentService } from '@/services/paymentService';
 import { Donation } from '@/types';
@@ -18,7 +18,6 @@ export default function MyDonationsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
   const [payingId, setPayingId] = useState<string | null>(null);
 
   const fetchDonations = async () => {
@@ -133,7 +132,7 @@ export default function MyDonationsPage() {
                           </strong>
                         </p>
                       )}
-                      {d.note && <p className="italic text-gray-400">"{d.note}"</p>}
+                      {d.note && <p className="italic text-gray-400">&quot;{d.note}&quot;</p>}
                     </div>
 
                     <span className="text-[11px] text-gray-400 block">
@@ -155,68 +154,21 @@ export default function MyDonationsPage() {
                       </Button>
                     )}
 
-                    <Button
-                      size="small"
-                      icon={<Eye className="w-3.5 h-3.5" />}
-                      onClick={() => setSelectedDonation(d)}
-                      className="rounded-lg text-xs"
-                    >
-                      Chi tiết
-                    </Button>
+                    <Link href={`/me/donations/${d._id}`}>
+                      <Button
+                        size="small"
+                        icon={<Eye className="w-3.5 h-3.5" />}
+                        className="rounded-lg text-xs"
+                      >
+                        Chi tiết
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               );
             })}
           </div>
         )}
-
-        {/* Detail Modal */}
-        <Modal
-          title="Chi Tiết Quyên Góp"
-          open={!!selectedDonation}
-          onCancel={() => setSelectedDonation(null)}
-          footer={null}
-        >
-          {selectedDonation && (
-            <div className="py-2 space-y-4 text-xs text-gray-600">
-              <div className="flex justify-between items-center pb-2 border-b border-gray-100">
-                <span>Mã quyên góp:</span>
-                <span className="font-mono font-bold">{selectedDonation._id}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Hình thức:</span>
-                <span className="font-bold capitalize">{selectedDonation.type}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span>Trạng thái:</span>
-                <StatusBadge type="donation" status={selectedDonation.status} />
-              </div>
-              {selectedDonation.type === 'money' ? (
-                <div className="flex justify-between items-center">
-                  <span>Số tiền:</span>
-                  <span className="text-base font-bold text-p-s700">
-                    {formatVND(selectedDonation.amount)}
-                  </span>
-                </div>
-              ) : (
-                <div className="space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                  <p><strong>Tên vật phẩm:</strong> {selectedDonation.productInfo?.name}</p>
-                  <p><strong>Số lượng:</strong> {selectedDonation.productInfo?.quantity}</p>
-                  <p><strong>Tình trạng:</strong> {selectedDonation.productInfo?.conditionNote || '—'}</p>
-                  <p><strong>Mô tả:</strong> {selectedDonation.productInfo?.description || '—'}</p>
-                </div>
-              )}
-              {selectedDonation.note && (
-                <div>
-                  <span className="text-gray-400 block mb-1">Ghi chú người gửi:</span>
-                  <p className="bg-gray-50 p-2.5 rounded-lg border border-gray-100">
-                    {selectedDonation.note}
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </Modal>
       </div>
     </DashboardLayout>
   );

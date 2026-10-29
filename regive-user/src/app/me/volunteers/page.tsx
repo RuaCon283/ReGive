@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Button, Alert, Tag } from 'antd';
-import { HandHeart, Calendar, MapPin, Clock, RefreshCw } from 'lucide-react';
+import { Button, Alert } from 'antd';
+import { Calendar, MapPin, Clock, RefreshCw, Eye } from 'lucide-react';
 import { volunteerService } from '@/services/volunteerService';
 import { VolunteerRegistration } from '@/types';
 import { formatDate } from '@/lib/format';
@@ -122,6 +122,18 @@ export default function MyVolunteersPage() {
                       </div>
                     </div>
                   )}
+
+                  <div className="pt-3 border-t border-gray-100 flex justify-end">
+                    <Link href={`/me/volunteers/${v._id}`}>
+                      <Button
+                        size="small"
+                        icon={<Eye className="w-3.5 h-3.5" />}
+                        className="rounded-lg text-xs"
+                      >
+                        Xem chi tiết
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               );
             })}
